@@ -1,0 +1,46 @@
+---
+title: "Sources et m&eacute;thodologie"
+output:
+  md_document
+---
+
+### Les sources statistiques
+
+
+Deux sources statistiques sont utilis&eacute;es au sein de cette application :
+
+
+- Le fichier d&eacute;tail du recensement de la population (RP) de l&apos;Insee portant sur les [migrations r&eacute;sidentielles](https://www.insee.fr/fr/statistiques/3566042?sommaire=3558417):
+
+Il permet de conna&icirc;tre, pour les personnes r&eacute;sidant en France, leur lieu de r&eacute;sidence au 1er janvier de l&apos;ann&eacute;e pr&eacute;c&eacute;dant l&apos;enqu&ecirc; te.  Le RP ne permet pas de mesurer les d&eacute;parts &agrave; l&apos;&eacute;tranger (les individus n&apos;y &eacute;tant pas recens&eacute;s ; en revanche les arriv&eacute;es en France sont, elles bien prises en compte), ni de conna&icirc;tre les mobilit&eacute;s des populations sp&eacute;cifiques suivantes :
+-	les enfants n&eacute;s au cours de l&apos;ann&eacute;e pr&eacute;c&eacute;dant l&apos;enqu&ecirc; te (donc &acirc;g&eacute;s de moins d&apos;un an) ;
+-	les d&eacute;tenus, les personnes vivant en habitation mobile, les sans-abris et les mariniers ;
+-	les personnes vivant &agrave; Mayotte (le RP n&apos;y est pas encore aussi complet que dans les autres Dom).
+
+Le mill&eacute;sime du recensement de l&apos;Insee utilis&eacute; ici est 2015, le dernier disponible &agrave; ce jour, qui porte sur les enqu&ecirc; tes annuelles de 2013 &agrave; 2017.
+
+
+- Les [s&eacute;ries historiques de population depuis 1968](https://www.insee.fr/fr/statistiques/3565661 )
+
+Afin de connaitre les dynamiques d&eacute;mographiques des territoires sur le long terme, il est n&eacute;cessaire de se r&eacute;f&eacute;rer aux donn&eacute;es de recensement coupl&eacute;es &agrave; celles de l&apos;Etat civil. Ces fichiers pr&eacute;sentent, par commune et par p&eacute;riode intercensitaire depuis 1968, le nombre d&apos;habitants, de naissances et de d&eacute;c&egrave;s. Il est ainsi possible d&apos;en d&eacute;duire pour le territoire souhait&eacute; des indicateurs : - d&apos;&eacute;volution d&eacute;mographique totale par p&eacute;riode - d&apos;&eacute;volution d&eacute;mographique due au solde naturel (r&eacute;sultant de la diff&eacute;rence entre naissances et d&eacute;c&egrave;s) - d&apos;&eacute;volution d&eacute;mographique due au solde migratoire apparent (obtenue par diff&eacute;rence entre &eacute;volution d&eacute;mographique totale et &eacute;volution due au solde naturel).
+
+Le mill&eacute;sime du recensement de l&apos;Insee utilis&eacute; ici est 2015, le dernier disponible &agrave; ce jour.
+
+
+### La m&eacute;thodologie <img src="https://raw.githubusercontent.com/observatoire-territoires/migR/master/man/figures/logo_migr.png" align="right" width=150 /> 
+
+D&eacute;velopp&eacute; avec le logiciel open-source R, l&apos;objectif du [package migR](https://github.com/observatoire-territoires/migR) est de faciliter l&apos;exploitation des fichiers du recensement de l&apos;Insee d&eacute;crivant les migrations r&eacute;sidentielles. Il propose &eacute;galement des indicateurs quantifiant les &eacute;changes entre territoires a plusieurs &eacute;chelles g&eacute;ographiques, ainsi que des indicateurs caract&eacute;risant l&apos;impact des migrations dans la composition socio-d&eacute;mographique des territoires.
+
+Deux articles documentant le package sont en ligne :
+
+-    une [note m&eacute;thodologique](https://observatoire-territoires.github.io/migR/articles/methodo_migr.html) pr&eacute;sentant les concepts n&eacute;cessaires &agrave; l&apos;&eacute;tude des migrations r&eacute;sidentielles.
+  -  un [tutoriel](https://observatoire-territoires.github.io/migR/articles/tutorial_fonctions_migr.html) d&eacute;taillant les fonctions du package.
+
+Le calcul de l&apos;ensemble des indicateurs valoris&eacute;s dans cette application peut donc &ecirc;tre facilement effectu&eacute; gr&acirc;ce aux fonctions propos&eacute;es dans le **package migR**. L&apos;analyse des mobilit&eacute;s r&eacute;sidentielles bas&eacute;es sur des sources de donn&eacute;es diff&eacute;rentes ou &agrave; d&apos;autres mailles d&apos;analyse est &eacute;galement possible.
+
+
+
+### Glossaire
+
+__solde migratoire net interne__ : il repr&eacute;sente la diff&eacute;rence entre le nombre d&apos;individus s&apos;&eacute;tant install&eacute;s dans une zone et le nombre d&apos;individus l&apos;ayant quitt&eacute;e au cours d&apos;une p&eacute;riode, &agrave; l&apos;exclusion des mouvements vers et depuis l&apos;&eacute;tranger. Le solde migratoire net interne permet de conna&icirc;tre avec pr&eacute;cision le profil des personnes &eacute;tant entr&eacute;es ou sorties d&apos;une zone g&eacute;ographique, mais il est limit&eacute; aux mobilit&eacute;s internes au territoire fran&ccedil;ais.
+

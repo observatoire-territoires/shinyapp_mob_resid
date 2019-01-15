@@ -1,0 +1,54 @@
+@import url("//fonts.googleapis.com/css?family=Roboto");
+
+h1 {
+  font-family: 'Roboto',  sans-serif;
+  font-weight: 500;
+  line-height: 1.1;
+  color: #1DADA1;
+}
+
+
+ h2, h3, h4, h5, h6 {
+  font-family: 'Roboto',  sans-serif;
+  font-weight: 5000;
+  line-height: 1.1;
+  color: #ad1d28;
+}
+
+body {
+  margin: 0;
+  font-family: "Roboto", sans-serif;
+  font-size: 1.2rem;
+  font-weight: 600;
+  line-height: 1.5;
+  color: #e5e5e5;
+  text-align: left;
+  background-color: #272B30;
+}
+
+#img-id{
+  position: fixed;
+  right: 5px;
+  top: 5px;
+}
+
+#panel-menu{
+  margin: 0;
+  font-family: "Roboto", sans-serif;
+  font-style: bold;
+  font-size: 1.4rem;
+  font-weight: 600;
+  line-height: 1.5;
+  color: #e5e5e5;
+  text-align: left;
+  background-color: #272B30;
+}
+
+#panel-menu-1{
+	margin: 0;
+  background-color: #f4a5b1;
+  color: #ff599c;
+  /* largeur min / max du container*/
+  /* min-width: 1200px; */
+  /*max-width: 2000px;*/
+}
