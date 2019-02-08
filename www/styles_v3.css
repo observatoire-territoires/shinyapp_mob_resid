@@ -94,6 +94,19 @@ border-color: transparent;
 */    
 
 
+#titre_panel_appli{
+    /* font-weight: bold; */
+    margin: 0;
+    background-color: #c0c3c5;
+    color: #ff599c;
+}
+#titre_panel_appli:hover{
+    /* font-weight: bold; */
+    margin: 0;
+    background-color: #c0c3c5;
+    color: #DDDDDD;
+}
+
 #sidebar{
     background-color: #DDDDDD;
 }
