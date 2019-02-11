@@ -4,7 +4,8 @@ Développé dans le cadre du rapport de l'Observatoire des territoires :
 [outils.observatoire-des-territoires.gouv.fr/mob_resid](https://outils.observatoire-des-territoires.gouv.fr/mob_resid)
 
 
-Librairies R utilisées :
+Librairies R utilisées
+----------
 
 -   base (R Core Team 2017)
 -   cartogram (Jeworutzki 2019)
