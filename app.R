@@ -347,11 +347,11 @@ server <- function(input, output, session) {
   shinyalert(
     text =  paste0(
       "<font size=3.5 color=black family=Roboto>",
-      "Cet outil de diagnostic territorial est mis à disposition de tous par l'Observatoire des Territoires dans le cadre de la 
+      "Cet outil de diagnostic territorial est mis à disposition de tous par l'Observatoire des territoires dans le cadre de la 
       publication de son rapport sur les mobilités résidentielles.<br>", "</font>",
       "<br>",
       "<font size=2.5 color=black family=Roboto>",
-      "L'affichage de cet outil interactif n'est pas optimisé pour les écrans de petite taille.
+      "L'affichage n'est pas optimisé sur les écrans de petite taille et sur Internet Explorer.
       Le temps de chargement sera d'autant plus long que l'échelle d'analyse est grande.
       Vous pouvez sélectionner le territoire de votre choix sur le","<b> menu placé à gauche de votre écran." ,"</font>")
     ,

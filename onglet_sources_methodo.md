@@ -2,10 +2,10 @@
 
 Deux sources statistiques sont utilis&eacute;es au sein de cette application :
 
--   Le [fichier
-    d&eacute;tail](https://www.insee.fr/fr/statistiques/3566042?sommaire=3558417)
+-   Le <a href="https://www.insee.fr/fr/statistiques/3566042?sommaire=3558417" target="_blank">fichier
+    d&eacute;tail</a>
     du recensement de la population (RP) de l&apos;Insee portant sur les
-    mobilit&eacute;s r&eacute;sidentielles:
+    mobilit&eacute;s r&eacute;sidentielles :
 
 Il permet de conna&icirc;tre, pour les personnes r&eacute;sidant en France, leur lieu
 de r&eacute;sidence au 1er janvier de l&apos;ann&eacute;e pr&eacute;c&eacute;dant l&apos;enqu&ecirc;te. Le RP ne
@@ -27,20 +27,16 @@ Le mill&eacute;sime du recensement de l&apos;Insee utilis&eacute; ici est 2015, 
 disponible &agrave; ce jour, qui porte sur les enqu&ecirc;tes annuelles de 2013 &agrave;
 2017.
 
--   Les [s&eacute;ries historiques de population depuis
-    1968](https://www.insee.fr/fr/statistiques/3565661)
+-   Les <a href="https://www.insee.fr/fr/statistiques/3565661" target="_blank">s&eacute;ries historiques de population</a> depuis 1968 :
 
-Afin de conna&icirc;tre les dynamiques d&eacute;mographiques des territoires sur le
+Afin de connaitre les dynamiques d&eacute;mographiques des territoires sur le
 long terme, il est n&eacute;cessaire de se r&eacute;f&eacute;rer aux donn&eacute;es de recensement
 coupl&eacute;es &agrave; celles de l&apos;Etat civil. Ces fichiers pr&eacute;sentent, par commune
 et par p&eacute;riode intercensitaire depuis 1968, le nombre d&apos;habitants, de
 naissances et de d&eacute;c&egrave;s. Il est ainsi possible d&apos;en d&eacute;duire pour le
-territoire souhait&eacute; des indicateurs : 
--- d&apos;&eacute;volution d&eacute;mographique
-totale par p&eacute;riode 
--- d&apos;&eacute;volution d&eacute;mographique due au solde naturel
-(r&eacute;sultant de la diff&eacute;rence entre naissances et d&eacute;c&egrave;s) 
--- d&apos;&eacute;volution
+territoire souhait&eacute; des indicateurs : -- d&apos;&eacute;volution d&eacute;mographique
+totale par p&eacute;riode -- d&apos;&eacute;volution d&eacute;mographique due au solde naturel
+(r&eacute;sultant de la diff&eacute;rence entre naissances et d&eacute;c&egrave;s) -- d&apos;&eacute;volution
 d&eacute;mographique due au solde migratoire apparent (obtenue par diff&eacute;rence
 entre &eacute;volution d&eacute;mographique totale et &eacute;volution due au solde naturel).
 
@@ -55,9 +51,8 @@ janvier 2018.
 
 ### M&eacute;thodologie <img src="https://raw.githubusercontent.com/observatoire-territoires/migR/master/man/figures/logo_migr.png" align="right" width=150 />
 
-D&eacute;velopp&eacute; avec le logiciel open-source R, l&apos;objectif du [package
-migR](https://github.com/observatoire-territoires/migR) est de faciliter
-l&apos;exploitation des fichiers du recensement de l&apos;Insee d&eacute;crivant les
+D&eacute;velopp&eacute; avec le logiciel open-source R, l&apos;objectif du <a href="https://github.com/observatoire-territoires/migR" target="_blank">package
+migR</a> est de faciliter l&apos;exploitation des fichiers du recensement de l&apos;Insee d&eacute;crivant les
 mobilit&eacute;s r&eacute;sidentielles. Il propose &eacute;galement des indicateurs
 quantifiant les &eacute;changes entre territoires &agrave; plusieurs &eacute;chelles
 g&eacute;ographiques, ainsi que des indicateurs caract&eacute;risant l&apos;impact des
@@ -66,13 +61,9 @@ territoires.
 
 Deux articles documentant le package sont en ligne :
 
--   une [note
-    m&eacute;thodologique](https://observatoire-territoires.github.io/migR/articles/methodo_migr.html)
-    pr&eacute;sentant les concepts n&eacute;cessaires &agrave; l&apos;&eacute;tude des mobilit&eacute;s
+-   une <a href="https://observatoire-territoires.github.io/migR/articles/methodo_migr.html" target="_blank">note m&eacute;thodologique</a> pr&eacute;sentant les concepts n&eacute;cessaires &agrave; l&apos;&eacute;tude des mobilit&eacute;s
     r&eacute;sidentielles.
--   un
-    [tutoriel](https://observatoire-territoires.github.io/migR/articles/tutorial_fonctions_migr.html)
-    d&eacute;taillant les fonctions du package.
+-   un <a href="https://observatoire-territoires.github.io/migR/articles/tutorial_fonctions_migr.html" target="_blank">tutoriel</a> d&eacute;taillant les fonctions du package.
 
 Le calcul de l&apos;ensemble des indicateurs valoris&eacute;s dans cette application
 peut donc &ecirc;tre facilement effectu&eacute; gr&acirc;ce aux fonctions propos&eacute;es dans le
@@ -82,9 +73,4 @@ sources de donn&eacute;es diff&eacute;rentes ou &agrave; d&apos;autres mailles d
 
 ### Application
 
-Le code source de cet outil est disponible sur le [compte github de
-l&apos;Observatoire des
-territoires](https://github.com/observatoire-territoires/app_shiny_migres)
-: depuis cette page il est possible d&apos;y remonter tout probl&egrave;me technique
-rencontr&eacute; lors de son utilisation, mais &eacute;galement les &eacute;volutions
-souhait&eacute;es.
+Le code source de cet outil est disponible sur le <a href="https://github.com/observatoire-territoires/shinyapp_mob_resid" target="_blank">compte github de l&apos;Observatoire des territoires</a> : depuis cette page il est possible d&apos;y remonter tout probl&egrave;me technique rencontr&eacute; lors de son utilisation, mais &eacute;galement les &eacute;volutions souhait&eacute;es.
