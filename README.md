@@ -1,7 +1,7 @@
 # Application de diagnostic territorial sur les mobilités résidentielles
 
 Développé dans le cadre du rapport de l'Observatoire des territoires :
-[outils.observatoire-des-territoires.gouv.fr/mob_resid](https://outils.observatoire-des-territoires.gouv.fr/mob_resid)
+[outils.observatoire-des-territoires.gouv.fr/mob_resid](http://outils.observatoire-des-territoires.gouv.fr/mob_resid)
 
 
 Librairies R utilisées
