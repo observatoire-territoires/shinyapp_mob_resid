@@ -517,7 +517,7 @@ server <- function(input, output, session) {
       ) )}
     } else if ( filteredData_TOT() %>% distinct(NIV_TERR) %>% pull() %in% 'EPCI') {
       {HTML(paste0("<font size=2.5 color=#838587 family=Roboto>" ,
-                   "Ces indicateurs sont actuellement indisponibles à cette maille d'analyse." ,"</font>",
+                   "Entre 2014 et 2015, quel est le bilan des échanges migratoires entre ", stri_trans_general(conv_accents(libelle_NIVGEO),"Latin-ASCII"),stri_trans_general(conv_accents(filteredData_nuagepoint_evoldemo() %>% filter(filtre_TERR %in% 'TERR') %>% distinct(LIB_TERR) %>% pull()),"Latin-ASCII") , " et les autres intercommunalités ?" ,"</font>",
                    "<br>", "<br>"
       ) )}
     } else if ( filteredData_TOT() %>% distinct(NIV_TERR) %>% pull() %in% 'REG') {
@@ -534,37 +534,16 @@ server <- function(input, output, session) {
   # chapeau d'introduction sur l'onglet 'profil sociodémographique'
   output$intro_onglet_profil <- renderUI({
     
-    # if(input$maille_TERR %in% 'REG') { libelle_NIVGEO <- "de la région "} 
-    # else if ( input$maille_TERR %in% 'DEP') { libelle_NIVGEO <- "du département "}
-    # else if ( input$maille_TERR %in% 'EPCI') { libelle_NIVGEO <- "de l'intercommunalité "}
+    if(input$maille_TERR %in% 'REG') { libelle_NIVGEO <- "de la région "} 
+    else if ( input$maille_TERR %in% 'DEP') { libelle_NIVGEO <- "du département "}
+    else if ( input$maille_TERR %in% 'EPCI') { libelle_NIVGEO <- "de l'intercommunalité "}
     
-    # {HTML(paste0("<font size=2.5 color=#838587 family=Roboto>" ,
-    #              "Quelle est la répartition de la population par tranche d'âge et par groupe socioprofessionnel, distinguée selon que l'on s'intéresse à l'ensemble des habitants ",
-    #              stri_trans_general(conv_accents(libelle_NIVGEO),"Latin-ASCII"),stri_trans_general(conv_accents(filteredData_nuagepoint_evoldemo() %>% filter(filtre_TERR %in% 'TERR') %>% distinct(LIB_TERR) %>% pull()),"Latin-ASCII"),
-    #              ", aux nouveaux arrivants ou à ceux qui en sont partis ?" ,"</font>",
-    #              "<br>", "<br>"
-    # ) )}
-    
-    
-    if(filteredData_TOT() %>% distinct(NIV_TERR) %>% pull() %in% 'DEP') {
-      {HTML(paste0("<font size=2 color=#4f5154 family=Roboto>" ,
-                                "Quelle est la répartition de la population par tranche d'âge et par groupe socioprofessionnel, distinguée selon que l'on s'intéresse à l'ensemble des habitants ",
-                                "du département ",stri_trans_general(conv_accents(filteredData_nuagepoint_evoldemo() %>% filter(filtre_TERR %in% 'TERR') %>% distinct(LIB_TERR) %>% pull()),"Latin-ASCII"),
-                                ", aux nouveaux arrivants ou à ceux qui en sont partis ?" ,"</font>",
-                   "<br>", "<br>"
-      ) )}
-    } else if ( filteredData_TOT() %>% distinct(NIV_TERR) %>% pull() %in% 'EPCI') {
-      {HTML(paste0("<font size=2 color=#4f5154 family=Roboto>" ,
-                   "Ces indicateurs sont actuellement indisponibles à cette maille d'analyse." ,"</b>","</font>",                   "<br>", "<br>"
-      ) )}
-    } else if ( filteredData_TOT() %>% distinct(NIV_TERR) %>% pull() %in% 'REG') {
-      {HTML(paste0("<font size=2 color=#4f5154 family=Roboto>" ,
-                   "Quelle est la répartition de la population par tranche d'âge et par groupe socioprofessionnel, distinguée selon que l'on s'intéresse à l'ensemble des habitants ",
-                   "de la région ",stri_trans_general(conv_accents(filteredData_nuagepoint_evoldemo() %>% filter(filtre_TERR %in% 'TERR') %>% distinct(LIB_TERR) %>% pull()),"Latin-ASCII"),
-                   ", aux nouveaux arrivants ou à ceux qui en sont partis ?" ,"</font>",
-                   "<br>", "<br>"
-      ) )}
-    }
+    {HTML(paste0("<font size=2.5 color=#838587 family=Roboto>" ,
+                 "Quelle est la répartition de la population par tranche d'âge et par groupe socioprofessionnel, distinguée selon que l'on s'intéresse à l'ensemble des habitants ",
+                 stri_trans_general(conv_accents(libelle_NIVGEO),"Latin-ASCII"),stri_trans_general(conv_accents(filteredData_nuagepoint_evoldemo() %>% filter(filtre_TERR %in% 'TERR') %>% distinct(LIB_TERR) %>% pull()),"Latin-ASCII"),
+                 ", aux nouveaux arrivants ou à ceux qui en sont partis ?" ,"</font>",
+                 "<br>", "<br>"
+    ) )}
     
   })
   
@@ -577,7 +556,7 @@ server <- function(input, output, session) {
       ) )}
     } else if ( filteredData_TOT() %>% distinct(NIV_TERR) %>% pull() %in% 'EPCI') {
       {HTML(paste0("<font size=2 color=#4f5154 family=Roboto>" ,
-                   "Ces indicateurs sont actuellement indisponibles à cette maille d'analyse." ,"</b>","</font>",                   "<br>", "<br>"
+                   "Comment les mobilités résidentielles modifient-elles la composition (par groupe socioprofessionnel et par classe d'âge) de l'intercommunalité ?" ,"</b>","</font>",                   "<br>", "<br>"
       ) )}
     } else if ( filteredData_TOT() %>% distinct(NIV_TERR) %>% pull() %in% 'REG') {
       {HTML(paste0("<font size=2 color=#4f5154 family=Roboto>" ,
@@ -943,7 +922,7 @@ server <- function(input, output, session) {
       ) )}
     } else if ( filteredData_TOT() %>% distinct(NIV_TERR) %>% pull() %in% 'EPCI') {
       {HTML(paste0("<font size=2 color=#4f5154 family=Roboto>" ,
-                   conv_accents("Ces indicateurs ne sont actuellement pas disponibles à cette maille d'analyse.") ,"</b>","</font>",
+                   conv_accents("D'où viennent les individus qui ont emménagé dans l'intercommunalité ? Où se sont installés ceux qui sont partis ?") ,"</b>","</font>",
                    "<br>", "<br>"
       ) )}
     } else if ( filteredData_TOT() %>% distinct(NIV_TERR) %>% pull() %in% 'REG') {
@@ -961,11 +940,11 @@ server <- function(input, output, session) {
     
     if(input$maille_TERR %in% 'REG') { libelle_NIVGEO <- "la région "} 
     else if ( input$maille_TERR %in% 'DEP') { libelle_NIVGEO <- "le département "}
-    else if ( input$maille_TERR %in% 'EPCI') return(NULL)
+    else if ( input$maille_TERR %in% 'EPCI') { libelle_NIVGEO <- "l'intercommunalité "}
     
     if(input$maille_TERR %in% 'REG') { libelle_NIVGEO_s <- "cette région "} 
     else if ( input$maille_TERR %in% 'DEP') { libelle_NIVGEO_s <- "ce département "}
-    else if ( input$maille_TERR %in% 'EPCI') return(NULL)
+    else if ( input$maille_TERR %in% 'EPCI') { libelle_NIVGEO_s <- "cette intercommunalité "}
     
     
     {HTML(paste0("<br>",
@@ -999,9 +978,13 @@ server <- function(input, output, session) {
         filter(NIV_TERR %in% input$maille_TERR) %>%
         mutate(filtre_TERR = case_when(TERR %in% gsub(".*\\((.*)\\).*", "\\1", input$territoireetude_DEP) ~ "TERR", TRUE ~ "RESTE"))
       
-    } else if ( input$maille_TERR %in% 'EPCI') return(NULL)
-    
-    else if ( input$maille_TERR %in% 'REG') {
+    } else if ( input$maille_TERR %in% 'EPCI') {
+      indics_migres_TERR %>%
+        as.data.frame() %>%
+        filter(NIV_TERR %in% input$maille_TERR) %>%
+        mutate(filtre_TERR = case_when(TERR %in% gsub(".*\\((.*)\\).*", "\\1", input$territoireetude_EPCI) ~ "TERR", TRUE ~ "RESTE"))
+      
+    } else if ( input$maille_TERR %in% 'REG') {
       indics_migres_TERR %>%
         as.data.frame() %>%
         filter(NIV_TERR %in% input$maille_TERR) %>%
@@ -1108,9 +1091,19 @@ server <- function(input, output, session) {
         mutate(CS1_LIB= factor(CS1_LIB, levels=rev(unique(CS1_LIB[order(CS1)])), ordered=TRUE) )
       
       
-    } else if ( input$maille_TERR %in% 'EPCI') return(NULL)
-    
-    else if ( input$maille_TERR %in% 'REG') {
+    } else if ( input$maille_TERR %in% 'EPCI') {
+      indics_migres_TERR_CS1 %>%
+        as.data.frame() %>%
+        filter(NIV_TERR %in% input$maille_TERR) %>%
+        filter(TERR %in% gsub(".*\\((.*)\\).*", "\\1", input$territoireetude_EPCI) ) %>%
+        select(TERR, LIB_TERR, CS1, nb_ind_ENTR, nb_ind_SORT, nb_ind_PRES) %>%
+        mutate_at(.vars = vars(nb_ind_ENTR, nb_ind_SORT, nb_ind_PRES), .funs = funs( ./(sum(.)) ) ) %>%
+        ajout_libelles_varventil_insee(TABLE = .,
+                                       VAR ="CS1",
+                                       MILLESIME_RP = 2015) %>%
+        mutate(CS1_LIB= factor(CS1_LIB, levels=rev(unique(CS1_LIB[order(CS1)])), ordered=TRUE) ) 
+      
+    } else if ( input$maille_TERR %in% 'REG') {
       indics_migres_TERR_CS1 %>%
         as.data.frame() %>%
         filter(NIV_TERR %in% input$maille_TERR) %>%
@@ -1337,9 +1330,16 @@ server <- function(input, output, session) {
         mutate_at(.vars = vars(nb_ind_ENTR, nb_ind_SORT, nb_ind_PRES), .funs = funs( ./(sum(.)) ) ) %>%
         mutate(AGEREVS = factor(AGEREVS, levels = c("< 20 ans","20-29 ans","30-39 ans","40-49 ans","50-64 ans","> 65 ans")))
       
-    } else if ( input$maille_TERR %in% 'EPCI') return(NULL)
-    
-    else if ( input$maille_TERR %in% 'REG') {
+    } else if ( input$maille_TERR %in% 'EPCI') {
+      indics_migres_TERR_AGEREVS %>%
+        as.data.frame() %>%
+        filter(NIV_TERR %in% input$maille_TERR) %>%
+        filter(TERR %in% gsub(".*\\((.*)\\).*", "\\1", input$territoireetude_EPCI) ) %>%
+        select(TERR, LIB_TERR, AGEREVS, nb_ind_ENTR, nb_ind_SORT, nb_ind_PRES) %>%
+        mutate_at(.vars = vars(nb_ind_ENTR, nb_ind_SORT, nb_ind_PRES), .funs = funs( ./(sum(.)) ) ) %>%
+        mutate(AGEREVS = factor(AGEREVS, levels = c("< 20 ans","20-29 ans","30-39 ans","40-49 ans","50-64 ans","> 65 ans")))
+      
+    } else if ( input$maille_TERR %in% 'REG') {
       indics_migres_TERR_AGEREVS %>%
         as.data.frame() %>%
         filter(NIV_TERR %in% input$maille_TERR) %>%
@@ -1581,9 +1581,18 @@ server <- function(input, output, session) {
         filter(!CS1 %in% 'GLOBAL')
       
       
-    } else if ( input$maille_TERR %in% 'EPCI') return(NULL)
-    
-    else if ( input$maille_TERR %in% 'REG') {
+    } else if ( input$maille_TERR %in% 'EPCI') {
+      indics_migres_TERR_CS1_RENOUV %>%
+        as.data.frame() %>%
+        filter(NIV_TERR %in% input$maille_TERR) %>%
+        filter(TERR %in% gsub(".*\\((.*)\\).*", "\\1", input$territoireetude_EPCI) ) %>%
+        ajout_libelles_varventil_insee(TABLE = . ,
+                                       VAR ="CS1",
+                                       MILLESIME_RP = 2015) %>%
+        spread(type_indice, valeur) %>%
+        filter(!CS1 %in% 'GLOBAL')
+      
+    } else if ( input$maille_TERR %in% 'REG') {
       indics_migres_TERR_CS1_RENOUV %>%
         as.data.frame() %>%
         filter(NIV_TERR %in% input$maille_TERR) %>%
@@ -1828,9 +1837,15 @@ server <- function(input, output, session) {
         filter(!AGEREVS %in% 'GLOBAL')
       
       
-    } else if ( input$maille_TERR %in% 'EPCI') return(NULL)
-    
-    else if ( input$maille_TERR %in% 'REG') {
+    } else if ( input$maille_TERR %in% 'EPCI') {
+      indics_migres_TERR_AGEREVS_RENOUV %>%
+        as.data.frame() %>%
+        filter(NIV_TERR %in% input$maille_TERR) %>%
+        filter(TERR %in% gsub(".*\\((.*)\\).*", "\\1", input$territoireetude_EPCI) ) %>%
+        spread(type_indice, valeur) %>%
+        filter(!AGEREVS %in% 'GLOBAL')
+      
+    } else if ( input$maille_TERR %in% 'REG') {
       indics_migres_TERR_AGEREVS_RENOUV %>%
         as.data.frame() %>%
         filter(NIV_TERR %in% input$maille_TERR) %>%
@@ -2077,9 +2092,18 @@ server <- function(input, output, session) {
         mutate(ratio_ligne = 8000) %>%
         mutate(ratio_fleche = 30) 
       
-    } else if ( input$maille_TERR %in% 'EPCI') return(NULL)
-    
-    
+    } else if ( input$maille_TERR %in% 'EPCI') {
+      
+      flux_migres_TERR.map %>%
+        filter(NIV_TERR %in% input$maille_TERR) %>%
+        filter(TERR_ACTU %in% gsub(".*\\((.*)\\).*", "\\1", input$territoireetude_EPCI) ) %>%
+        # cappé à 10 flux minimum ?
+        filter(nb_ind >= 10)%>%
+        # définition du ratio
+        mutate(ratio_ligne = 2500) %>%
+        mutate(ratio_fleche = 60) 
+      
+    }
   })
   
   
@@ -2109,7 +2133,18 @@ server <- function(input, output, session) {
         mutate(ratio_fleche = 30) 
       
       
-    } else if ( input$maille_TERR %in% 'EPCI') return(NULL)
+    } else if ( input$maille_TERR %in% 'EPCI') {
+      
+      flux_migres_TERR.map %>%
+        filter(NIV_TERR %in% input$maille_TERR) %>%
+        filter(TERR_ANTE %in% gsub(".*\\((.*)\\).*", "\\1", input$territoireetude_EPCI) ) %>%
+        # cappé à 10 flux minimum ?
+        filter(nb_ind >= 10)%>%
+        # définition du ratio
+        mutate(ratio_ligne = 2500) %>%
+        mutate(ratio_fleche = 60) 
+      
+    }
   })
   
   # dataframe pour flux SM net
@@ -2154,7 +2189,25 @@ server <- function(input, output, session) {
       
       
       
-    } else if ( input$maille_TERR %in% 'EPCI') return(NULL)
+    } else if ( input$maille_TERR %in% 'EPCI') {
+      
+      flux_migres_TERR.map.SMnet %>%
+        filter(NIV_TERR %in% input$maille_TERR) %>%
+        filter(TERR_j %in% gsub(".*\\((.*)\\).*", "\\1", input$territoireetude_EPCI)) %>%
+        # définition du ratio
+        mutate(ratio_ligne = 2500) %>%
+        mutate(ratio_fleche = 60) %>%
+        mutate(type_flow = "entr") %>%
+        rbind.data.frame(flux_migres_TERR.map.SMnet %>%
+                           filter(NIV_TERR %in% input$maille_TERR) %>%
+                           filter(TERR_i %in% gsub(".*\\((.*)\\).*", "\\1", input$territoireetude_EPCI)) %>%
+                           # définition du ratio
+                           mutate(ratio_ligne = 2500) %>%
+                           mutate(ratio_fleche = 60) %>%
+                           mutate(type_flow = "sort"))
+      
+      
+    }
   })
   
   ### territoire cible geo
@@ -2171,7 +2224,12 @@ server <- function(input, output, session) {
         filter(NIV_TERR %in% input$maille_TERR) %>%
         filter(TERR %in% gsub(".*\\((.*)\\).*", "\\1", input$territoireetude_DEP)) 
       
-    } else if ( input$maille_TERR %in% 'EPCI') return(NULL)
+    } else if ( input$maille_TERR %in% 'EPCI') {
+      
+      geo_TERR_poly %>%
+        filter(NIV_TERR %in% input$maille_TERR) %>%
+        filter(TERR %in% gsub(".*\\((.*)\\).*", "\\1", input$territoireetude_EPCI)) 
+    }
   })
   
   #########################
