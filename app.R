@@ -639,7 +639,7 @@ server <- function(input, output, session) {
                    " de ", paste0(symnum(filteredData_nuagepoint_evoldemo() %>% filter(filtre_TERR %in% 'TERR') %>% filter(periode %in% '2010_2015') %>% select(TX_EVOL_DEMO_AN_TOT) %>% pull(),
                                          c(-Inf, 0, Inf),
                                          c("", "+")),
-                                  percent(filteredData_nuagepoint_evoldemo() %>% filter(filtre_TERR %in% 'TERR') %>% filter(periode %in% '2010_2015') %>% select(TX_EVOL_DEMO_AN_TOT) %>% pull(), accuracy = 0.01),""), ".<br>", "<br>",
+                                  percent(filteredData_nuagepoint_evoldemo() %>% filter(filtre_TERR %in% 'TERR') %>% filter(periode %in% '2010_2015') %>% select(TX_EVOL_DEMO_AN_TOT) %>% pull(), accuracy = 0.01),""), " en moyenne par an.<br>", "<br>",
                    "Cette évolution de la population résulte :", "<br>",
                    "- d'un solde naturel ",  paste0(symnum(filteredData_nuagepoint_evoldemo() %>% filter(filtre_TERR %in% 'TERR') %>% filter(periode %in% '2010_2015') %>% select(TX_EVOL_DEMO_AN_SN) %>% pull(),
                                                            c(-Inf,-0.01,-0.0025, 0.0025, 0.01, Inf),
@@ -648,7 +648,7 @@ server <- function(input, output, session) {
                                         c(-Inf, 0, Inf),
                                         c("", "+")),
                                  percent(filteredData_nuagepoint_evoldemo() %>% filter(filtre_TERR %in% 'TERR') %>% filter(periode %in% '2010_2015') %>% select(TX_EVOL_DEMO_AN_SN) %>% pull(), accuracy = 0.01),""),
-                   ") <br>",
+                   " par an) <br>",
                    
                    "- d'un solde migratoire * ",  paste0(symnum(filteredData_nuagepoint_evoldemo() %>% filter(filtre_TERR %in% 'TERR') %>% filter(periode %in% '2010_2015') %>% select(TX_EVOL_DEMO_AN_SMA) %>% pull(),
                                                                 c(-Inf,-0.01,-0.0025, 0.0025, 0.01, Inf),
@@ -657,12 +657,12 @@ server <- function(input, output, session) {
                                         c(-Inf, 0, Inf),
                                         c("", "+")),
                                  percent(filteredData_nuagepoint_evoldemo() %>% filter(filtre_TERR %in% 'TERR') %>% filter(periode %in% '2010_2015') %>% select(TX_EVOL_DEMO_AN_SMA) %>% pull(), accuracy = 0.01),""),
-                   ")","</font>", "<br>", "<br>", "<br>", "<br>","<br>",
+                   " par an)","</font>", "<br>", "<br>", "<br>", "<br>","<br>",
                    "<font size=1.5 color=#4f5154 family=Roboto fontface = italic>
                    * Il s'agit ici du solde migratoire apparent, c'est à dire de la différence entre l'évolution démographique totale du territoire et celle
                    due au solde naturel.
                    Le solde migratoire apparent intègre donc les échanges avec l'étranger, et n'est pas comparable avec le solde migratoire net interne
-                   (onglets suivants) qui exclue ces échanges.</font>"
+                   (onglets suivants) qui exclut ces échanges.</font>"
                    
       ) )}
     }
@@ -688,7 +688,7 @@ server <- function(input, output, session) {
                    " de ", paste0(symnum(filteredData_nuagepoint_evoldemo() %>% filter(filtre_TERR %in% 'TERR') %>% filter(periode %in% '2010_2015') %>% select(TX_EVOL_DEMO_AN_TOT) %>% pull(),
                                          c(-Inf, 0, Inf),
                                          c("", "+")),
-                                  percent(filteredData_nuagepoint_evoldemo() %>% filter(filtre_TERR %in% 'TERR') %>% filter(periode %in% '2010_2015') %>% select(TX_EVOL_DEMO_AN_TOT) %>% pull(), accuracy = 0.01),""), " par an en moyenne.<br>", "<br>",
+                                  percent(filteredData_nuagepoint_evoldemo() %>% filter(filtre_TERR %in% 'TERR') %>% filter(periode %in% '2010_2015') %>% select(TX_EVOL_DEMO_AN_TOT) %>% pull(), accuracy = 0.01),""), " en moyenne par an.<br>", "<br>",
                    "Cette évolution de la population résulte :", "<br>",
                    "- d'un solde naturel ",  paste0(symnum(filteredData_nuagepoint_evoldemo() %>% filter(filtre_TERR %in% 'TERR') %>% filter(periode %in% '2010_2015') %>% select(TX_EVOL_DEMO_AN_SN) %>% pull(),
                                                            c(-Inf,-0.01,-0.0025, 0.0025, 0.01, Inf),
@@ -770,14 +770,14 @@ server <- function(input, output, session) {
                    fill=NA,
                    stat = "identity", color = "black", shape = 21, stroke = 3
         ) +
-        scale_x_continuous(name = "Taux d'évolution de la population due au solde migratoire apparent", 
+        scale_x_continuous(name = "Taux d'évolution de la population due au solde migratoire apparent (moyenne annuelle)", 
                            limits=c(-borne_axe_max,borne_axe_max),
                            labels=function(x)paste0(symnum(x,c(-Inf, 0, Inf),c("", "+")),percent(x, accuracy = 0.1),"")) +
-        scale_y_continuous(name = "Taux d'évolution de la population due au solde naturel",
+        scale_y_continuous(name = "Taux d'évolution de la population due au solde naturel (moyenne annuelle)",
                            limits=c(-borne_axe_max,borne_axe_max),
                            labels=function(x)paste0(symnum(x,c(-Inf, 0, Inf),c("", "+")),percent(x, accuracy = 0.1),"")) +
         scale_size_continuous(name = "Population", breaks=c(100000,1000000,3000000),labels=function(x) format(x, big.mark = " ", scientific = FALSE)) +
-        scale_fill_gradient2(name = "Taux d'évolution\nde la population\nentre 2010 et 2015",
+        scale_fill_gradient2(name = "Taux d'évolution\nde la population\nentre 2010 et 2015 (moyenne annuelle)",
                              labels=function(x)paste0(symnum(x,c(-Inf, 0, Inf),c("", "+")),percent(x, accuracy = 1),""),
                              low = "#0a3470", mid = "white", high = "#91141a", midpoint = 0) +
         guides( size = guide_legend(order = 2)) +
@@ -842,19 +842,19 @@ server <- function(input, output, session) {
                                                                                                "<font size=2 color=white family=Roboto>" , "Taux d&apos;&eacute;volution de la population", "<br>",
                                                                                                "<font size=2 color=white family=Roboto>" , "due au solde naturel ","<br>",
                                                                                                "<font size=2.5 color=white family=Roboto>", "entre ",substr(periode,1,4)," et ",substr(periode,6,9) ," : ", "<br>",
-                                                                                               paste0(symnum(   val,c(-Inf, 0, Inf), c("", "+")), percent( val, accuracy = 0.01),""),"</font>", "<br>"
+                                                                                               paste0(symnum(   val,c(-Inf, 0, Inf), c("", "+")), percent( val, accuracy = 0.01),"")," par an</font>", "<br>"
                                ),
                                indic %in% 'TX_EVOL_DEMO_AN_SMA' ~ paste0("<style> div.leaflet-popup-content {width:auto!important;}</style>",
                                                                          "<font size=2 color=white family=Roboto>" , "Taux d&apos;&eacute;volution de la population", "<br>",
                                                                          "<font size=2 color=white family=Roboto>" , "due au solde migratoire apparent ","<br>",
                                                                          "<font size=2.5 color=white family=Roboto>", "entre ",substr(periode,1,4)," et ",substr(periode,6,9) ," : ", "<br>",
-                                                                         paste0(symnum(   val, c(-Inf, 0, Inf),c("", "+")), percent( val, accuracy = 0.01),""),"</font>", "<br>"
+                                                                         paste0(symnum(   val, c(-Inf, 0, Inf),c("", "+")), percent( val, accuracy = 0.01),"")," par an</font>", "<br>"
                                ),
                                indic %in% 'TX_EVOL_DEMO_AN_TOT' ~ paste0("<style> div.leaflet-popup-content {width:auto!important;}</style>",
                                                                          "<font size=2 color=white family=Roboto>" , "Taux d&apos;&eacute;volution de la population", "<br>",
                                                                          "<font size=2 color=white family=Roboto>" , "totale ","<br>",
                                                                          "<font size=2.5 color=white family=Roboto>", "entre ",substr(periode,1,4)," et ",substr(periode,6,9) ," : ", "<br>",
-                                                                         paste0(symnum(  val, c(-Inf, 0, Inf), c("", "+")),percent(  val, accuracy = 0.01),""),"</font>", "<br>")) )
+                                                                         paste0(symnum(  val, c(-Inf, 0, Inf), c("", "+")),percent(  val, accuracy = 0.01),"")," par an</font>", "<br>")) )
                              
                              
                              ,
@@ -867,7 +867,7 @@ server <- function(input, output, session) {
                              position="dodge", stat="identity") +
         scale_alpha_discrete(range=c(0.5,1)) +
         scale_fill_manual(guide = FALSE, values = c("#f67a36","#5B937C", '#666666')) +
-        scale_y_continuous(name = "Taux d'évolution annuelle de la population", 
+        scale_y_continuous(name = "Taux d'évolution annuelle de la population (moyenne annuelle)", 
                            limits = c(-(filteredData_nuagepoint_evoldemo() %>%
                                           filter(filtre_TERR %in% "TERR") %>%
                                           select(TERR, periode, 
