@@ -62,31 +62,6 @@ liste_DEP <- indics_migres_TERR %>% filter(NIV_TERR %in% 'DEP') %>% distinct(TER
 liste_EPCI <- indics_migres_TERR %>% filter(NIV_TERR %in% 'EPCI') %>% distinct(TERR,LIB_TERR) %>% mutate(lib_code_TERR = paste0(LIB_TERR, " (" ,TERR,")")) %>% pull(lib_code_TERR)
 liste_REG <- indics_migres_TERR %>% filter(NIV_TERR %in% 'REG') %>% distinct(TERR,LIB_TERR) %>% mutate(lib_code_TERR = paste0(LIB_TERR, " (" ,TERR,")")) %>% pull(lib_code_TERR)
 
-# liste des EPCI à afficher
-liste_EPCI_OK <- c(
-  "200054781",
-  "200054807",
-  "200046977",
-  "245900410",
-  "243300316",
-  "243100518",
-  "244400404",
-  "200030195",
-  "200023414",
-  "246700488",
-  "243400017",
-  "200040715",
-  "243500139",
-  "248300543",
-  "244200770",
-  "243700754",
-  "246300701",
-  "244500468",
-  "245400676",
-  "242100410",
-  "200039865",
-  "242900314")
-
 
 # import carto
 geo_TERR_poly <- st_read("data/geo_TERR_poly.gpkg") %>% st_transform(4326) %>%
@@ -262,12 +237,12 @@ ui <- navbarPage(
                           , 
                           tags$head(tags$style(type="text/css", ".container-fluid {  /*max-width: 2000px;*/ min-width: 1200px; "))
              ),
-             
+ 
              mainPanel(
                tabsetPanel(
                  tabPanel("Evolution démographique" ,
                           fluidRow(htmlOutput("intro_onglet_evoldemo")) ,
-                          
+
                           column(5,htmlOutput("pres_evoldemo")),
                           
                           column(7,  radioButtons("type_temporalite", "",
@@ -327,8 +302,7 @@ ui <- navbarPage(
                                    icon = "question-circle",
                                    colour = "#5b937c",
                                    content = c("Les mobilités résidentielles quantifiées ici sont qualifiées de 'nettes internes'.",
-                                               paste0("Elles ne prennent en compte donc en compte que les ", "<b>" ,"échanges entre le territoire considéré et le reste de la France","</b>" ,", et cela entre deux années 
-                                                      consécutives.","<br>","<br>",
+                                               paste0("Elles ne prennent en compte donc en compte que les ", "<b>" ,"échanges entre le territoire considéré et le reste de la France","</b>" ,", et cela entre deux années consécutives.","<br>","<br>",
                                                       "L'icône loupe est affichée en haut à droite de la carte afin de zoomer grâce à un double-clic sur la zone souhaitée.") ),
                                    size = "m"), 
                           radioButtons("type_flux", "Type de flux :",
@@ -340,25 +314,25 @@ ui <- navbarPage(
                                        selected = 'ENTR') ,
                           column(9,ggiraphOutput(outputId="flux", width = 875, height = 600) %>% withSpinner(type = 1, color="#1B7F3F")) )#,
                )
-               
-                 )
+
              )
-), 
-tabPanel('Sources et méthodologie',
-         fluidRow(
-           # pour publication shinyapps, format md dans dossier 
-           column(10,includeMarkdown("onglet_sources_methodo.md"))
-         )
-),
-navbarMenu('A propos',
-           tabPanel(a("L'Observatoire", href = 'http://www.observatoire-des-territoires.gouv.fr/observatoire-des-territoires/fr/node', target = '_blank')),
-           tabPanel(a("Le rapport", href = 'http://www.observatoire-des-territoires.gouv.fr/observatoire-des-territoires/fr/rapports', target = '_blank'))
-),
-# eviter message d'erreur avant output
-tags$style(type="text/css",
-           ".shiny-output-error { visibility: hidden; }",
-           ".shiny-output-error:before { visibility: hidden; }"
-),useShinyalert()
+           )
+  ), 
+  tabPanel('Sources et méthodologie',
+           fluidRow(
+             # pour publication shinyapps, format md dans dossier 
+             column(10,includeMarkdown("onglet_sources_methodo.md"))
+           )
+  ),
+  navbarMenu('A propos',
+             tabPanel(a("L'Observatoire", href = 'http://www.observatoire-des-territoires.gouv.fr/observatoire-des-territoires/fr/node', target = '_blank')),
+             tabPanel(a("Le rapport", href = 'http://www.observatoire-des-territoires.gouv.fr/observatoire-des-territoires/fr/rapports', target = '_blank'))
+  ),
+  # eviter message d'erreur avant output
+  tags$style(type="text/css",
+             ".shiny-output-error { visibility: hidden; }",
+             ".shiny-output-error:before { visibility: hidden; }"
+  ),useShinyalert()
 )
 
 
@@ -429,7 +403,7 @@ server <- function(input, output, session) {
     
   })
   
-  
+ 
   # update de l'id TERR uniquement si l'id selectionné via map_click correspond au NIVGEO
   # sinon pas de changement et on conserve celui en mémoire
   
@@ -538,30 +512,23 @@ server <- function(input, output, session) {
     
     if(filteredData_TOT() %>% distinct(NIV_TERR) %>% pull() %in% 'DEP') {
       {HTML(paste0("<font size=2.5 color=#838587 family=Roboto>" ,
-                   "Entre 2014 et 2015, quel est le bilan des échanges migratoires entre ", stri_trans_general(conv_accents(libelle_NIVGEO),"Latin-ASCII"),stri_trans_general(conv_accents(filteredData_nuagepoint_evoldemo() %>% filter
-                                                                                                                                                                                           (filtre_TERR %in% 'TERR') %>% distinct(LIB_TERR) %>% pull()),"Latin-ASCII")  , " et les autres départements ?" ,"</font>",
+                   "Entre 2014 et 2015, quel est le bilan des échanges migratoires entre ", stri_trans_general(conv_accents(libelle_NIVGEO),"Latin-ASCII"),stri_trans_general(conv_accents(filteredData_nuagepoint_evoldemo() %>% filter(filtre_TERR %in% 'TERR') %>% distinct(LIB_TERR) %>% pull()),"Latin-ASCII")  , " et les autres départements ?" ,"</font>",
                    "<br>", "<br>"
       ) )}
-    } else if ( filteredData_TOT() %>% distinct(NIV_TERR) %>% pull() %in% 'EPCI' & !gsub(".*\\((.*)\\).*", "\\1", input$territoireetude_EPCI) %in% liste_EPCI_OK) {
+    } else if ( filteredData_TOT() %>% distinct(NIV_TERR) %>% pull() %in% 'EPCI') {
       {HTML(paste0("<font size=2.5 color=#838587 family=Roboto>" ,
-                   "A cette maille d'analyse ces indicateurs ne sont disponibles que pour les métropoles, ceux pour les intercommunalités moins peuplées pouvant être moins robustes." ,"</font>",
-                   "<br>", "<br>"
-      ) )}
-      
-    } else if ( filteredData_TOT() %>% distinct(NIV_TERR) %>% pull() %in% 'EPCI' & gsub(".*\\((.*)\\).*", "\\1", input$territoireetude_EPCI) %in% liste_EPCI_OK) {
-      {HTML(paste0("<font size=2.5 color=#838587 family=Roboto>" ,
-                   "Entre 2014 et 2015, quel est le bilan des échanges migratoires entre ", stri_trans_general(conv_accents(libelle_NIVGEO),"Latin-ASCII"),stri_trans_general(conv_accents(filteredData_nuagepoint_evoldemo() %>% filter
-                                                                                                                                                                                           (filtre_TERR %in% 'TERR') %>% distinct(LIB_TERR) %>% pull()),"Latin-ASCII")  , " et les autres intercommunalités ?" ,"</font>",
+                   "Ces indicateurs sont actuellement indisponibles à cette maille d'analyse." ,"</font>",
                    "<br>", "<br>"
       ) )}
     } else if ( filteredData_TOT() %>% distinct(NIV_TERR) %>% pull() %in% 'REG') {
       {HTML(paste0("<font size=2.5 color=#838587 family=Roboto>" ,
-                   "Entre 2014 et 2015, quel est le bilan des échanges migratoires entre ", stri_trans_general(conv_accents(libelle_NIVGEO),"Latin-ASCII"),stri_trans_general(conv_accents(filteredData_nuagepoint_evoldemo() %>% filter
-                                                                                                                                                                                           (filtre_TERR %in% 'TERR') %>% distinct(LIB_TERR) %>% pull()),"Latin-ASCII")  , " et les autres régions ?" ,"</font>",
+                   "Entre 2014 et 2015, quel est le bilan des échanges migratoires entre ", stri_trans_general(conv_accents(libelle_NIVGEO),"Latin-ASCII"),stri_trans_general(conv_accents(filteredData_nuagepoint_evoldemo() %>% filter(filtre_TERR %in% 'TERR') %>% distinct(LIB_TERR) %>% pull()),"Latin-ASCII")  , " et les autres régions ?" ,"</font>",
                    "<br>", "<br>"
       ) )}
     }
   })
+  
+  
   
   
   # chapeau d'introduction sur l'onglet 'profil sociodémographique'
@@ -581,24 +548,16 @@ server <- function(input, output, session) {
     
     if(filteredData_TOT() %>% distinct(NIV_TERR) %>% pull() %in% 'DEP') {
       {HTML(paste0("<font size=2 color=#4f5154 family=Roboto>" ,
-                   "Quelle est la répartition de la population par tranche d'âge et par groupe socioprofessionnel, distinguée selon que l'on s'intéresse à l'ensemble des habitants ",
-                   "du département ",stri_trans_general(conv_accents(filteredData_nuagepoint_evoldemo() %>% filter(filtre_TERR %in% 'TERR') %>% distinct(LIB_TERR) %>% pull()),"Latin-ASCII"),
-                   ", aux nouveaux arrivants ou à ceux qui en sont partis ?" ,"</font>",
+                                "Quelle est la répartition de la population par tranche d'âge et par groupe socioprofessionnel, distinguée selon que l'on s'intéresse à l'ensemble des habitants ",
+                                "du département ",stri_trans_general(conv_accents(filteredData_nuagepoint_evoldemo() %>% filter(filtre_TERR %in% 'TERR') %>% distinct(LIB_TERR) %>% pull()),"Latin-ASCII"),
+                                ", aux nouveaux arrivants ou à ceux qui en sont partis ?" ,"</font>",
                    "<br>", "<br>"
       ) )}
-    } else if ( filteredData_TOT() %>% distinct(NIV_TERR) %>% pull() %in% 'EPCI' & !gsub(".*\\((.*)\\).*", "\\1", input$territoireetude_EPCI) %in% liste_EPCI_OK) {
+    } else if ( filteredData_TOT() %>% distinct(NIV_TERR) %>% pull() %in% 'EPCI') {
       {HTML(paste0("<font size=2 color=#4f5154 family=Roboto>" ,
-                   "A cette maille d'analyse ces indicateurs ne sont disponibles que pour les métropoles, ceux pour les intercommunalités moins peuplées pouvant être moins robustes." ,"</b>","</font>",                   "<br>", "<br>"
+                   "Ces indicateurs sont actuellement indisponibles à cette maille d'analyse." ,"</b>","</font>",                   "<br>", "<br>"
       ) )}
-    } else if ( filteredData_TOT() %>% distinct(NIV_TERR) %>% pull() %in% 'EPCI' & gsub(".*\\((.*)\\).*", "\\1", input$territoireetude_EPCI) %in% liste_EPCI_OK) {
-      {HTML(paste0("<font size=2 color=#4f5154 family=Roboto>" ,
-                   "Quelle est la répartition de la population par tranche d'âge et par groupe socioprofessionnel, distinguée selon que l'on s'intéresse à l'ensemble des habitants ",
-                   "de l'intercommunalité ",stri_trans_general(conv_accents(filteredData_nuagepoint_evoldemo() %>% filter(filtre_TERR %in% 'TERR') %>% distinct(LIB_TERR) %>% pull()),"Latin-ASCII"),
-                   ", aux nouveaux arrivants ou à ceux qui en sont partis ?" ,"</font>",
-                   "<br>", "<br>"
-      ) )}
-    }
-    else if ( filteredData_TOT() %>% distinct(NIV_TERR) %>% pull() %in% 'REG') {
+    } else if ( filteredData_TOT() %>% distinct(NIV_TERR) %>% pull() %in% 'REG') {
       {HTML(paste0("<font size=2 color=#4f5154 family=Roboto>" ,
                    "Quelle est la répartition de la population par tranche d'âge et par groupe socioprofessionnel, distinguée selon que l'on s'intéresse à l'ensemble des habitants ",
                    "de la région ",stri_trans_general(conv_accents(filteredData_nuagepoint_evoldemo() %>% filter(filtre_TERR %in% 'TERR') %>% distinct(LIB_TERR) %>% pull()),"Latin-ASCII"),
@@ -616,14 +575,9 @@ server <- function(input, output, session) {
                    "Comment les mobilités résidentielles modifient-elles la composition (par groupe socioprofessionnel et par classe d'âge) du département ?" ,"</b>","</font>",
                    "<br>", "<br>"
       ) )}
-    } else if ( filteredData_TOT() %>% distinct(NIV_TERR) %>% pull() %in% 'EPCI' & !gsub(".*\\((.*)\\).*", "\\1", input$territoireetude_EPCI) %in% liste_EPCI_OK ) {
+    } else if ( filteredData_TOT() %>% distinct(NIV_TERR) %>% pull() %in% 'EPCI') {
       {HTML(paste0("<font size=2 color=#4f5154 family=Roboto>" ,
-                   "A cette maille d'analyse ces indicateurs ne sont disponibles que pour les métropoles, ceux pour les intercommunalités moins peuplées pouvant être moins robustes." ,"</b>","</font>",                   "<br>", "<br>"
-      ) )}
-    } else if ( filteredData_TOT() %>% distinct(NIV_TERR) %>% pull() %in% 'EPCI' & gsub(".*\\((.*)\\).*", "\\1", input$territoireetude_EPCI) %in% liste_EPCI_OK) {
-      {HTML(paste0("<font size=2 color=#4f5154 family=Roboto>" ,
-                   "Comment les mobilités résidentielles modifient-elles la composition (par groupe socioprofessionnel et par classe d'âge) de l'intercommunalité ?" ,"</b>","</font>",
-                   "<br>", "<br>"
+                   "Ces indicateurs sont actuellement indisponibles à cette maille d'analyse." ,"</b>","</font>",                   "<br>", "<br>"
       ) )}
     } else if ( filteredData_TOT() %>% distinct(NIV_TERR) %>% pull() %in% 'REG') {
       {HTML(paste0("<font size=2 color=#4f5154 family=Roboto>" ,
@@ -645,13 +599,7 @@ server <- function(input, output, session) {
         filter(NIV_TERR %in% input$maille_TERR) %>%
         mutate(filtre_TERR = case_when(TERR %in% gsub(".*\\((.*)\\).*", "\\1", input$territoireetude_DEP) ~ "TERR", TRUE ~ "RESTE"))
       
-    } else if ( input$maille_TERR %in% 'EPCI' & !gsub(".*\\((.*)\\).*", "\\1", input$territoireetude_EPCI) %in% liste_EPCI_OK) {
-      indics_TERR_histodemo %>%
-        as.data.frame() %>%
-        filter(NIV_TERR %in% input$maille_TERR) %>%
-        mutate(filtre_TERR = case_when(TERR %in% gsub(".*\\((.*)\\).*", "\\1", input$territoireetude_EPCI) ~ "TERR", TRUE ~ "RESTE"))
-      
-    } else if ( input$maille_TERR %in% 'EPCI' & gsub(".*\\((.*)\\).*", "\\1", input$territoireetude_EPCI) %in% liste_EPCI_OK) {
+    } else if ( input$maille_TERR %in% 'EPCI') {
       indics_TERR_histodemo %>%
         as.data.frame() %>%
         filter(NIV_TERR %in% input$maille_TERR) %>%
@@ -679,13 +627,11 @@ server <- function(input, output, session) {
       {HTML(paste0("<br>",
                    "<font size=3 color=#4f5154 family=Roboto>",
                    "Entre 2010 et 2015,", "<br>","<br>",
-                   "la population ", stri_trans_general(conv_accents(libelle_NIVGEO),"Latin-ASCII"),"<b>",stri_trans_general(conv_accents(filteredData_nuagepoint_evoldemo() %>% filter(filtre_TERR %in% 'TERR') %>% distinct(LIB_TERR) %>% 
-                                                                                                                                            pull()),"Latin-ASCII"),"</b>" ,"<br>",
+                    "la population ", stri_trans_general(conv_accents(libelle_NIVGEO),"Latin-ASCII"),"<b>",stri_trans_general(conv_accents(filteredData_nuagepoint_evoldemo() %>% filter(filtre_TERR %in% 'TERR') %>% distinct(LIB_TERR) %>% pull()),"Latin-ASCII"),"</b>" ,"<br>",
                    "<b>",paste0(symnum(filteredData_nuagepoint_evoldemo() %>% filter(filtre_TERR %in% 'TERR') %>% filter(periode %in% '2010_2015') %>% select(EVOL_DEMO_TOT) %>% pull(),
                                        c(-Inf, 0, Inf),
                                        c("a diminué de ", "a augmenté de ")),
-                                format(round(filteredData_nuagepoint_evoldemo() %>% filter(filtre_TERR %in% 'TERR') %>% filter(periode %in% '2010_2015') %>% select(EVOL_DEMO_TOT) %>% pull() %>% abs(),-1), nsmall=0, big.mark=' '),""), " 
-                   personnes", "</b>", "<br>",
+                                format(round(filteredData_nuagepoint_evoldemo() %>% filter(filtre_TERR %in% 'TERR') %>% filter(periode %in% '2010_2015') %>% select(EVOL_DEMO_TOT) %>% pull() %>% abs(),-1), nsmall=0, big.mark=' '),""), " personnes", "</b>", "<br>",
                    "soit ",paste0(symnum(filteredData_nuagepoint_evoldemo() %>% filter(filtre_TERR %in% 'TERR') %>% filter(periode %in% '2010_2015') %>% select(TX_EVOL_DEMO_AN_TOT) %>% pull(),
                                          c(-Inf,-0.01,-0.0025, 0.0025, 0.01, Inf),
                                          c(" une forte baisse ", " une baisse", " une relative stagnation", "une hausse", " une forte hausse")), ""),
@@ -693,8 +639,7 @@ server <- function(input, output, session) {
                    " de ", paste0(symnum(filteredData_nuagepoint_evoldemo() %>% filter(filtre_TERR %in% 'TERR') %>% filter(periode %in% '2010_2015') %>% select(TX_EVOL_DEMO_AN_TOT) %>% pull(),
                                          c(-Inf, 0, Inf),
                                          c("", "+")),
-                                  percent(filteredData_nuagepoint_evoldemo() %>% filter(filtre_TERR %in% 'TERR') %>% filter(periode %in% '2010_2015') %>% select(TX_EVOL_DEMO_AN_TOT) %>% pull(), accuracy = 0.01),""), " en moyenne par 
-                   an.<br>", "<br>",
+                                  percent(filteredData_nuagepoint_evoldemo() %>% filter(filtre_TERR %in% 'TERR') %>% filter(periode %in% '2010_2015') %>% select(TX_EVOL_DEMO_AN_TOT) %>% pull(), accuracy = 0.01),""), " en moyenne par an.<br>", "<br>",
                    "Cette évolution de la population résulte :", "<br>",
                    "- d'un solde naturel ",  paste0(symnum(filteredData_nuagepoint_evoldemo() %>% filter(filtre_TERR %in% 'TERR') %>% filter(periode %in% '2010_2015') %>% select(TX_EVOL_DEMO_AN_SN) %>% pull(),
                                                            c(-Inf,-0.01,-0.0025, 0.0025, 0.01, Inf),
@@ -731,13 +676,11 @@ server <- function(input, output, session) {
       {HTML(paste0("<br>",
                    "<font size=3 color=#4f5154 family=Roboto>",
                    "Entre 2010 et 2015,", "<br>","<br>",
-                   "la population ", stri_trans_general(conv_accents(libelle_NIVGEO),"Latin-ASCII"),"<b>",stri_trans_general(conv_accents(filteredData_nuagepoint_evoldemo() %>% filter(filtre_TERR %in% 'TERR') %>% distinct(LIB_TERR) %>% 
-                                                                                                                                            pull()),"Latin-ASCII"),"</b>" ,"<br>",
+                   "la population ", stri_trans_general(conv_accents(libelle_NIVGEO),"Latin-ASCII"),"<b>",stri_trans_general(conv_accents(filteredData_nuagepoint_evoldemo() %>% filter(filtre_TERR %in% 'TERR') %>% distinct(LIB_TERR) %>% pull()),"Latin-ASCII"),"</b>" ,"<br>",
                    "<b>",paste0(symnum(filteredData_nuagepoint_evoldemo() %>% filter(filtre_TERR %in% 'TERR') %>% filter(periode %in% '2010_2015') %>% select(EVOL_DEMO_TOT) %>% pull(),
                                        c(-Inf, 0, Inf),
                                        c("a diminué de ", "a augmenté de ")),
-                                format(round(filteredData_nuagepoint_evoldemo() %>% filter(filtre_TERR %in% 'TERR') %>% filter(periode %in% '2010_2015') %>% select(EVOL_DEMO_TOT) %>% pull() %>% abs(),-1), nsmall=0, big.mark=' '),""), " 
-                   personnes", "</b>", "<br>",
+                                format(round(filteredData_nuagepoint_evoldemo() %>% filter(filtre_TERR %in% 'TERR') %>% filter(periode %in% '2010_2015') %>% select(EVOL_DEMO_TOT) %>% pull() %>% abs(),-1), nsmall=0, big.mark=' '),""), " personnes", "</b>", "<br>",
                    "soit ",paste0(symnum(filteredData_nuagepoint_evoldemo() %>% filter(filtre_TERR %in% 'TERR') %>% filter(periode %in% '2010_2015') %>% select(TX_EVOL_DEMO_AN_TOT) %>% pull(),
                                          c(-Inf,-0.01,-0.0025, 0.0025, 0.01, Inf),
                                          c(" une forte baisse ", " une baisse", " une relative stagnation", "une hausse", " une forte hausse")), ""),
@@ -745,8 +688,7 @@ server <- function(input, output, session) {
                    " de ", paste0(symnum(filteredData_nuagepoint_evoldemo() %>% filter(filtre_TERR %in% 'TERR') %>% filter(periode %in% '2010_2015') %>% select(TX_EVOL_DEMO_AN_TOT) %>% pull(),
                                          c(-Inf, 0, Inf),
                                          c("", "+")),
-                                  percent(filteredData_nuagepoint_evoldemo() %>% filter(filtre_TERR %in% 'TERR') %>% filter(periode %in% '2010_2015') %>% select(TX_EVOL_DEMO_AN_TOT) %>% pull(), accuracy = 0.01),""), " en moyenne par 
-                   an.<br>", "<br>",
+                                  percent(filteredData_nuagepoint_evoldemo() %>% filter(filtre_TERR %in% 'TERR') %>% filter(periode %in% '2010_2015') %>% select(TX_EVOL_DEMO_AN_TOT) %>% pull(), accuracy = 0.01),""), " en moyenne par an.<br>", "<br>",
                    "Cette évolution de la population résulte :", "<br>",
                    "- d'un solde naturel ",  paste0(symnum(filteredData_nuagepoint_evoldemo() %>% filter(filtre_TERR %in% 'TERR') %>% filter(periode %in% '2010_2015') %>% select(TX_EVOL_DEMO_AN_SN) %>% pull(),
                                                            c(-Inf,-0.01,-0.0025, 0.0025, 0.01, Inf),
@@ -756,7 +698,7 @@ server <- function(input, output, session) {
                                         c("", "+")),
                                  percent(filteredData_nuagepoint_evoldemo() %>% filter(filtre_TERR %in% 'TERR') %>% filter(periode %in% '2010_2015') %>% select(TX_EVOL_DEMO_AN_SN) %>% pull(), accuracy = 0.01),""),
                    " par an) <br>",
-                   
+
                    "- d'un solde migratoire* ",  paste0(symnum(filteredData_nuagepoint_evoldemo() %>% filter(filtre_TERR %in% 'TERR') %>% filter(periode %in% '2010_2015') %>% select(TX_EVOL_DEMO_AN_SMA) %>% pull(),
                                                                c(-Inf,-0.01,-0.0025, 0.0025, 0.01, Inf),
                                                                c(" très négatif ", " négatif", " quasiment nul ", " positif", " fortement positif")), ""), 
@@ -771,8 +713,8 @@ server <- function(input, output, session) {
     
     
     } 
-    
-      ) 
+
+) 
   
   
   output$nuagepoint_evoldemo <- renderggiraph({
@@ -952,7 +894,7 @@ server <- function(input, output, session) {
                                                 gather(indic, val, -periode,  -TERR) %>% filter(grepl('TX', indic)) %>% select(val) %>% min() %>% abs()) %>% max()),
                            labels=function(x)paste0(symnum(x,c(-Inf, 0, Inf),c("", "+")),percent(x, accuracy = 0.1),"")) +
         scale_x_discrete( name = '') +
-        
+
         geom_hline(yintercept = 0, size = 1,color = "black") +
         facet_wrap("indic", nrow = 3, labeller = as_labeller(noms_type_evol_POP)) +
         labs(
@@ -999,14 +941,9 @@ server <- function(input, output, session) {
                    conv_accents("D'où viennent les individus qui ont emménagé dans le département ? Où se sont installés ceux qui sont partis ?") ,"</b>","</font>",
                    "<br>", "<br>"
       ) )}
-    } else if ( filteredData_TOT() %>% distinct(NIV_TERR) %>% pull() %in% 'EPCI' & !gsub(".*\\((.*)\\).*", "\\1", input$territoireetude_EPCI) %in% liste_EPCI_OK) {
+    } else if ( filteredData_TOT() %>% distinct(NIV_TERR) %>% pull() %in% 'EPCI') {
       {HTML(paste0("<font size=2 color=#4f5154 family=Roboto>" ,
-                   conv_accents("A cette maille d'analyse ces indicateurs ne sont disponibles que pour les métropoles, ceux pour les intercommunalités moins peuplées pouvant être moins robustes.") ,"</b>","</font>",
-                   "<br>", "<br>"
-      ) )}
-    } else if ( filteredData_TOT() %>% distinct(NIV_TERR) %>% pull() %in% 'EPCI' & gsub(".*\\((.*)\\).*", "\\1", input$territoireetude_EPCI) %in% liste_EPCI_OK) {
-      {HTML(paste0("<font size=2 color=#4f5154 family=Roboto>" ,
-                   conv_accents("D'où viennent les individus qui ont emménagé dans l'intercommunalité ? Où se sont installés ceux qui sont partis ?") ,"</b>","</font>",
+                   conv_accents("Ces indicateurs ne sont actuellement pas disponibles à cette maille d'analyse.") ,"</b>","</font>",
                    "<br>", "<br>"
       ) )}
     } else if ( filteredData_TOT() %>% distinct(NIV_TERR) %>% pull() %in% 'REG') {
@@ -1024,22 +961,18 @@ server <- function(input, output, session) {
     
     if(input$maille_TERR %in% 'REG') { libelle_NIVGEO <- "la région "} 
     else if ( input$maille_TERR %in% 'DEP') { libelle_NIVGEO <- "le département "}
-    else if ( input$maille_TERR %in% 'EPCI' & !gsub(".*\\((.*)\\).*", "\\1", input$territoireetude_EPCI) %in% liste_EPCI_OK) return(NULL)
-    else if ( input$maille_TERR %in% 'EPCI' & gsub(".*\\((.*)\\).*", "\\1", input$territoireetude_EPCI) %in% liste_EPCI_OK) { libelle_NIVGEO <- "l'intercommunalité "}
+    else if ( input$maille_TERR %in% 'EPCI') return(NULL)
     
     if(input$maille_TERR %in% 'REG') { libelle_NIVGEO_s <- "cette région "} 
     else if ( input$maille_TERR %in% 'DEP') { libelle_NIVGEO_s <- "ce département "}
-    else if ( input$maille_TERR %in% 'EPCI' & !gsub(".*\\((.*)\\).*", "\\1", input$territoireetude_EPCI) %in% liste_EPCI_OK) return(NULL)
-    else if ( input$maille_TERR %in% 'EPCI' & gsub(".*\\((.*)\\).*", "\\1", input$territoireetude_EPCI) %in% liste_EPCI_OK) { libelle_NIVGEO_s <- "cette intercommunalité "}
-    
+    else if ( input$maille_TERR %in% 'EPCI') return(NULL)
     
     
     {HTML(paste0("<br>",
                  "<font size=3 color=#4f5154 family=Roboto>",
                  "Entre 2014 et 2015,", "<br>","<br>",
                  "<b>",format(round(filteredData_TOT() %>% select(nb_ind_ENTR) %>% pull(),-1), nsmall=0, big.mark=' '),"</b>"," individus sont arrivés","<br>",  "dans ",
-                 stri_trans_general(conv_accents(libelle_NIVGEO),"Latin-ASCII"),"<b>",stri_trans_general(conv_accents(filteredData_nuagepoint_evoldemo() %>% filter(filtre_TERR %in% 'TERR') %>% distinct(LIB_TERR) %>% pull()),"Latin-
-                                                                                                         ASCII"),"</b>","</font>" ,"<br>",
+                 stri_trans_general(conv_accents(libelle_NIVGEO),"Latin-ASCII"),"<b>",stri_trans_general(conv_accents(filteredData_nuagepoint_evoldemo() %>% filter(filtre_TERR %in% 'TERR') %>% distinct(LIB_TERR) %>% pull()),"Latin-ASCII"),"</b>","</font>" ,"<br>",
                  "<font size=2 color=#4f5154 family=Roboto> soit ",filteredData_TOT() %>% select(PE) %>% pull()  %>% percent(.,accuracy = 0.1)," de la population présente en 2015. </font> <br>",
                  "<br>",
                  "<b>","<font size=3 color=#4f5154 family=Roboto>",format(round(filteredData_TOT() %>% select(nb_ind_SORT) %>% pull(),-1), nsmall=0, big.mark=" "),"</b>"," individus en sont partis </font>","<br>",
@@ -1054,7 +987,7 @@ server <- function(input, output, session) {
                  #                                                                    c("", "+")),
                  #                                                             percent(filteredData_TOT()$TM, accuracy = 0.01),""), " de la population. </font>"
                  
-                 ) )}
+    ) )}
   })
   
   ## nuage de points pour contexte ####
@@ -1066,15 +999,8 @@ server <- function(input, output, session) {
         filter(NIV_TERR %in% input$maille_TERR) %>%
         mutate(filtre_TERR = case_when(TERR %in% gsub(".*\\((.*)\\).*", "\\1", input$territoireetude_DEP) ~ "TERR", TRUE ~ "RESTE"))
       
-    } 
-    else if ( input$maille_TERR %in% 'EPCI' & !gsub(".*\\((.*)\\).*", "\\1", input$territoireetude_EPCI) %in% liste_EPCI_OK) return(NULL)
+    } else if ( input$maille_TERR %in% 'EPCI') return(NULL)
     
-    else if ( input$maille_TERR %in% 'EPCI' & gsub(".*\\((.*)\\).*", "\\1", input$territoireetude_EPCI) %in% liste_EPCI_OK) {
-      indics_migres_TERR %>%
-        as.data.frame() %>%
-        filter(NIV_TERR %in% input$maille_TERR) %>%
-        mutate(filtre_TERR = case_when(TERR %in% gsub(".*\\((.*)\\).*", "\\1", input$territoireetude_EPCI) ~ "TERR", TRUE ~ "RESTE"))
-    }    
     else if ( input$maille_TERR %in% 'REG') {
       indics_migres_TERR %>%
         as.data.frame() %>%
@@ -1100,7 +1026,7 @@ server <- function(input, output, session) {
       geom_abline(intercept = 0, slope = 1, color = "grey40",linetype = "dashed") +
       geom_point_interactive(data= filteredData_nuagepoint_mig() %>%
                                mutate(LIB_TERR = stri_trans_general(conv_accents(LIB_TERR),"Latin-ASCII")) %>%
-                               mutate(tip = paste0("<style> div.leaflet-popup-content {width:auto!important;}</style>",
+                              mutate(tip = paste0("<style> div.leaflet-popup-content {width:auto!important;}</style>",
                                                    "<b>", LIB_TERR ,"</b>", "<br>",
                                                    "<font size=2.5 color=white family=Roboto>" , PE  %>% percent(.,accuracy = 0.1), " d&apos;entrants","</font>", "<br>",
                                                    "<font size=2.5 color=white family=Roboto>" , PS  %>% percent(.,accuracy = 0.1), " de sortants","</font>", "<br>"
@@ -1182,21 +1108,7 @@ server <- function(input, output, session) {
         mutate(CS1_LIB= factor(CS1_LIB, levels=rev(unique(CS1_LIB[order(CS1)])), ordered=TRUE) )
       
       
-    } 
-    else if ( input$maille_TERR %in% 'EPCI' & !gsub(".*\\((.*)\\).*", "\\1", input$territoireetude_EPCI) %in% liste_EPCI_OK) return(NULL)
-    
-    else if ( input$maille_TERR %in% 'EPCI' & gsub(".*\\((.*)\\).*", "\\1", input$territoireetude_EPCI) %in% liste_EPCI_OK) {
-      indics_migres_TERR_CS1 %>%
-        as.data.frame() %>%
-        filter(NIV_TERR %in% input$maille_TERR) %>%
-        filter(TERR %in% gsub(".*\\((.*)\\).*", "\\1", input$territoireetude_EPCI) ) %>%
-        select(TERR, LIB_TERR, CS1, nb_ind_ENTR, nb_ind_SORT, nb_ind_PRES) %>%
-        mutate_at(.vars = vars(nb_ind_ENTR, nb_ind_SORT, nb_ind_PRES), .funs = funs( ./(sum(.)) ) ) %>%
-        ajout_libelles_varventil_insee(TABLE = .,
-                                       VAR ="CS1",
-                                       MILLESIME_RP = 2015) %>%
-        mutate(CS1_LIB= factor(CS1_LIB, levels=rev(unique(CS1_LIB[order(CS1)])), ordered=TRUE) ) 
-    }
+    } else if ( input$maille_TERR %in% 'EPCI') return(NULL)
     
     else if ( input$maille_TERR %in% 'REG') {
       indics_migres_TERR_CS1 %>%
@@ -1274,28 +1186,24 @@ server <- function(input, output, session) {
                                  mutate(value_pct1 = value / sum(value)) %>%
                                  mutate(pos = cumsum(value_pct1)- value_pct1/2) %>%
                                  mutate(CS1_LIB = conv_accents(CS1_LIB)) %>% 
-                                 mutate(CS1_LIB = factor(CS1_LIB, levels = c("Agriculteurs exploitants","Artisans, commer&ccedil;ants et chefs d&apos;entreprise","Cadres et professions intellectuelles sup&eacute;rieures","Professions 
-                                                                             Interm&eacute;diaires",
+                                 mutate(CS1_LIB = factor(CS1_LIB, levels = c("Agriculteurs exploitants","Artisans, commer&ccedil;ants et chefs d&apos;entreprise","Cadres et professions intellectuelles sup&eacute;rieures","Professions Interm&eacute;diaires",
                                                                              "Employ&eacute;s","Ouvriers","Retrait&eacute;s","Autres personnes sans activit&eacute; professionnelle","9"))) %>% 
-                                 mutate(tip = case_when(input$type_pop %in% 'PRES' ~ paste0("<style> div.leaflet-popup-content {width:auto!important;}</style>",
-                                                                                            "<font size=2.5 color=white family=Roboto>",
-                                                                                            "<b>", percent(value, accuracy = 2),"</b>"," des individus pr&eacute;sents ",  
-                                                                                            "dans ",  stri_trans_general(conv_accents(libelle_NIVGEO),"Latin-ASCII"),"<b>",stri_trans_general(conv_accents(filteredData_nuagepoint_evoldemo() 
-                                                                                                                                                                                                           %>% filter(filtre_TERR %in% 'TERR') %>% distinct(LIB_TERR) %>% pull()),"Latin-ASCII"),"</b>" ,"<br>",
-                                                                                            "en 2015  ","sont des ","<b>",tolower(CS1_LIB),"</b>", "<br>"),
-                                                        input$type_pop %in% 'ENTR' ~ paste0("<style> div.leaflet-popup-content {width:auto!important;}</style>",
-                                                                                            "<font size=2.5 color=white family=Roboto>",
-                                                                                            "<b>", percent(value, accuracy = 2),"</b>"," des individus arriv&eacute;s ",  
-                                                                                            "dans ",stri_trans_general(conv_accents(libelle_NIVGEO),"Latin-ASCII"),"<b>",stri_trans_general(conv_accents(filteredData_nuagepoint_evoldemo() 
-                                                                                                                                                                                                         %>% filter(filtre_TERR %in% 'TERR') %>% distinct(LIB_TERR) %>% pull()),"Latin-ASCII"),"</b>" ,"<br>",
-                                                                                            "sont des ","<b>",tolower(CS1_LIB),"</b>", "<br>"),
-                                                        input$type_pop %in% 'SORT' ~ paste0("<style> div.leaflet-popup-content {width:auto!important;}</style>",
-                                                                                            "<font size=2.5 color=white family=Roboto>",
-                                                                                            "<b>", percent(value, accuracy = 2),"</b>"," des individus ayant quitt&eacute; ", 
-                                                                                            stri_trans_general(conv_accents(libelle_NIVGEO),"Latin-ASCII"),"<b>",stri_trans_general(conv_accents(filteredData_nuagepoint_evoldemo() %>% 
-                                                                                                                                                                                                   filter(filtre_TERR %in% 'TERR') %>% distinct(LIB_TERR) %>% pull()),"Latin-ASCII"),"</b>" ,"<br>",
-                                                                                            "entre 2014 et 2015 ","sont des ","<b>",tolower(CS1_LIB),"</b>", "<br>")
-                                 ))
+                                mutate(tip = case_when(input$type_pop %in% 'PRES' ~ paste0("<style> div.leaflet-popup-content {width:auto!important;}</style>",
+                                                                                          "<font size=2.5 color=white family=Roboto>",
+                                                                                          "<b>", percent(value, accuracy = 2),"</b>"," des individus pr&eacute;sents ",  
+                                                                                          "dans ",  stri_trans_general(conv_accents(libelle_NIVGEO),"Latin-ASCII"),"<b>",stri_trans_general(conv_accents(filteredData_nuagepoint_evoldemo() %>% filter(filtre_TERR %in% 'TERR') %>% distinct(LIB_TERR) %>% pull()),"Latin-ASCII"),"</b>" ,"<br>",
+                                                                                          "en 2015  ","sont des ","<b>",tolower(CS1_LIB),"</b>", "<br>"),
+                                                      input$type_pop %in% 'ENTR' ~ paste0("<style> div.leaflet-popup-content {width:auto!important;}</style>",
+                                                                                          "<font size=2.5 color=white family=Roboto>",
+                                                                                          "<b>", percent(value, accuracy = 2),"</b>"," des individus arriv&eacute;s ",  
+                                                                                          "dans ",stri_trans_general(conv_accents(libelle_NIVGEO),"Latin-ASCII"),"<b>",stri_trans_general(conv_accents(filteredData_nuagepoint_evoldemo() %>% filter(filtre_TERR %in% 'TERR') %>% distinct(LIB_TERR) %>% pull()),"Latin-ASCII"),"</b>" ,"<br>",
+                                                                                          "sont des ","<b>",tolower(CS1_LIB),"</b>", "<br>"),
+                                                      input$type_pop %in% 'SORT' ~ paste0("<style> div.leaflet-popup-content {width:auto!important;}</style>",
+                                                                                          "<font size=2.5 color=white family=Roboto>",
+                                                                                          "<b>", percent(value, accuracy = 2),"</b>"," des individus ayant quitt&eacute; ", 
+                                                                                          stri_trans_general(conv_accents(libelle_NIVGEO),"Latin-ASCII"),"<b>",stri_trans_general(conv_accents(filteredData_nuagepoint_evoldemo() %>% filter(filtre_TERR %in% 'TERR') %>% distinct(LIB_TERR) %>% pull()),"Latin-ASCII"),"</b>" ,"<br>",
+                                                                                          "entre 2014 et 2015 ","sont des ","<b>",tolower(CS1_LIB),"</b>", "<br>")
+                               ))
     ) +
       geom_bar_interactive(aes(x=2, y=value_pct1, fill=CS1_LIB,
                                tooltip = tip,
@@ -1364,10 +1272,9 @@ server <- function(input, output, session) {
                                 mutate(value_pct1 = value / sum(value)) %>%
                                 mutate(pos = cumsum(value_pct1)- value_pct1/2) %>%
                                 mutate(CS1_LIB = conv_accents(CS1_LIB)) %>% 
-                                mutate(CS1_LIB = factor(CS1_LIB, levels = c("Agriculteurs exploitants","Artisans, commer&ccedil;ants et chefs d&apos;entreprise","Cadres et professions intellectuelles sup&eacute;rieures","Professions 
-                                                                            Interm&eacute;diaires",
+                                mutate(CS1_LIB = factor(CS1_LIB, levels = c("Agriculteurs exploitants","Artisans, commer&ccedil;ants et chefs d&apos;entreprise","Cadres et professions intellectuelles sup&eacute;rieures","Professions Interm&eacute;diaires",
                                                                             "Employ&eacute;s","Ouvriers","Retrait&eacute;s","Autres personnes sans activit&eacute; professionnelle","9"))) %>% 
-                                
+
                                 mutate(tip = case_when(input$type_pop %in% 'PRES' ~ paste0("<style> div.leaflet-popup-content {width:auto!important;}</style>",
                                                                                            "<font size=2.5 color=white family=Roboto>",
                                                                                            "En moyenne ","<b>", percent(value, accuracy = 2),"</b>"," des individus pr&eacute;sents ",  
@@ -1430,18 +1337,8 @@ server <- function(input, output, session) {
         mutate_at(.vars = vars(nb_ind_ENTR, nb_ind_SORT, nb_ind_PRES), .funs = funs( ./(sum(.)) ) ) %>%
         mutate(AGEREVS = factor(AGEREVS, levels = c("< 20 ans","20-29 ans","30-39 ans","40-49 ans","50-64 ans","> 65 ans")))
       
-    } 
-    else if ( input$maille_TERR %in% 'EPCI' & !gsub(".*\\((.*)\\).*", "\\1", input$territoireetude_EPCI) %in% liste_EPCI_OK) return(NULL)
+    } else if ( input$maille_TERR %in% 'EPCI') return(NULL)
     
-    else if ( input$maille_TERR %in% 'EPCI' & gsub(".*\\((.*)\\).*", "\\1", input$territoireetude_EPCI) %in% liste_EPCI_OK) {
-      indics_migres_TERR_AGEREVS %>%
-        as.data.frame() %>%
-        filter(NIV_TERR %in% input$maille_TERR) %>%
-        filter(TERR %in% gsub(".*\\((.*)\\).*", "\\1", input$territoireetude_EPCI) ) %>%
-        select(TERR, LIB_TERR, AGEREVS, nb_ind_ENTR, nb_ind_SORT, nb_ind_PRES) %>%
-        mutate_at(.vars = vars(nb_ind_ENTR, nb_ind_SORT, nb_ind_PRES), .funs = funs( ./(sum(.)) ) ) %>%
-        mutate(AGEREVS = factor(AGEREVS, levels = c("< 20 ans","20-29 ans","30-39 ans","40-49 ans","50-64 ans","> 65 ans")))
-    }   
     else if ( input$maille_TERR %in% 'REG') {
       indics_migres_TERR_AGEREVS %>%
         as.data.frame() %>%
@@ -1453,7 +1350,7 @@ server <- function(input, output, session) {
     }
   })
   
-  
+ 
   # dataframe profil moyen CS
   filteredData_profilpop_AGEREVS_MOY <- reactive({
     
@@ -1522,20 +1419,17 @@ server <- function(input, output, session) {
                                 mutate(tip = case_when(input$type_pop %in% 'PRES' ~ paste0("<style> div.leaflet-popup-content {width:auto!important;}</style>",
                                                                                            "<font size=2.5 color=white family=Roboto>",
                                                                                            "<b>", percent(value, accuracy = 2),"</b>"," des individus pr&eacute;sents dans ", 
-                                                                                           stri_trans_general(conv_accents(libelle_NIVGEO),"Latin-ASCII"),"<b>",stri_trans_general(conv_accents(filteredData_nuagepoint_evoldemo() %>% 
-                                                                                                                                                                                                  filter(filtre_TERR %in% 'TERR') %>% distinct(LIB_TERR) %>% pull()),"Latin-ASCII"),"</b>" ,"<br>",
+                                                                                           stri_trans_general(conv_accents(libelle_NIVGEO),"Latin-ASCII"),"<b>",stri_trans_general(conv_accents(filteredData_nuagepoint_evoldemo() %>% filter(filtre_TERR %in% 'TERR') %>% distinct(LIB_TERR) %>% pull()),"Latin-ASCII"),"</b>" ,"<br>",
                                                                                            "en 2015 ","ont ","<b>",AGEREVS_txt,"</b>", "<br>"),
                                                        input$type_pop %in% 'ENTR' ~ paste0("<style> div.leaflet-popup-content {width:auto!important;}</style>",
                                                                                            "<font size=2.5 color=white family=Roboto>",
                                                                                            "<b>", percent(value, accuracy = 2),"</b>"," des individus arriv&eacute;s dans ", 
-                                                                                           stri_trans_general(conv_accents(libelle_NIVGEO),"Latin-ASCII"),"<b>",stri_trans_general(conv_accents(filteredData_nuagepoint_evoldemo() %>% 
-                                                                                                                                                                                                  filter(filtre_TERR %in% 'TERR') %>% distinct(LIB_TERR) %>% pull()),"Latin-ASCII"),"</b>" ,"<br>",
+                                                                                           stri_trans_general(conv_accents(libelle_NIVGEO),"Latin-ASCII"),"<b>",stri_trans_general(conv_accents(filteredData_nuagepoint_evoldemo() %>% filter(filtre_TERR %in% 'TERR') %>% distinct(LIB_TERR) %>% pull()),"Latin-ASCII"),"</b>" ,"<br>",
                                                                                            "entre 2014 et 2015 ","ont ","<b>",AGEREVS_txt,"</b>", "<br>"),
                                                        input$type_pop %in% 'SORT' ~ paste0("<style> div.leaflet-popup-content {width:auto!important;}</style>",
                                                                                            "<font size=2.5 color=white family=Roboto>",
                                                                                            "<b>", percent(value, accuracy = 2),"</b>"," des individus ayant quitt&eacute; ",
-                                                                                           stri_trans_general(conv_accents(libelle_NIVGEO),"Latin-ASCII"),"<b>",stri_trans_general(conv_accents(filteredData_nuagepoint_evoldemo() %>% 
-                                                                                                                                                                                                  filter(filtre_TERR %in% 'TERR') %>% distinct(LIB_TERR) %>% pull()),"Latin-ASCII"),"</b>" ,"<br>",
+                                                                                           stri_trans_general(conv_accents(libelle_NIVGEO),"Latin-ASCII"),"<b>",stri_trans_general(conv_accents(filteredData_nuagepoint_evoldemo() %>% filter(filtre_TERR %in% 'TERR') %>% distinct(LIB_TERR) %>% pull()),"Latin-ASCII"),"</b>" ,"<br>",
                                                                                            "entre 2014 et 2015 ","ont ","<b>",AGEREVS_txt,"</b>", "<br>")
                                 ))
     ) +
@@ -1687,20 +1581,7 @@ server <- function(input, output, session) {
         filter(!CS1 %in% 'GLOBAL')
       
       
-    } 
-    else if ( input$maille_TERR %in% 'EPCI' & !gsub(".*\\((.*)\\).*", "\\1", input$territoireetude_EPCI) %in% liste_EPCI_OK) return(NULL)
-    
-    else if ( input$maille_TERR %in% 'EPCI' & gsub(".*\\((.*)\\).*", "\\1", input$territoireetude_EPCI) %in% liste_EPCI_OK) {
-      indics_migres_TERR_CS1_RENOUV %>%
-        as.data.frame() %>%
-        filter(NIV_TERR %in% input$maille_TERR) %>%
-        filter(TERR %in% gsub(".*\\((.*)\\).*", "\\1", input$territoireetude_EPCI) ) %>%
-        ajout_libelles_varventil_insee(TABLE = . ,
-                                       VAR ="CS1",
-                                       MILLESIME_RP = 2015) %>%
-        spread(type_indice, valeur) %>%
-        filter(!CS1 %in% 'GLOBAL')
-    }
+    } else if ( input$maille_TERR %in% 'EPCI') return(NULL)
     
     else if ( input$maille_TERR %in% 'REG') {
       indics_migres_TERR_CS1_RENOUV %>%
@@ -1830,45 +1711,42 @@ server <- function(input, output, session) {
                mutate(lib_Q_pct_ind_PRES = conv_accents(lib_Q_pct_ind_PRES)) %>%
                mutate(lib_Q_evol_pct_AUTO_PRES = conv_accents(lib_Q_evol_pct_AUTO_PRES)) %>%
                mutate(LIB_TERR = stri_trans_general(conv_accents(LIB_TERR),"Latin-ASCII")) %>%
-               mutate(tip = case_when( niveau_TERR %in% 'REG' ~
-                                         paste0("<style> div.leaflet-popup-content {width:auto!important;}</style>",
-                                                "<font size=2.5 color=white family=Roboto>" , "Les ","<b>",tolower(CS1_LIB),"</b>"," repr&eacute;sentent ",percent(pct_ind_PRES, accuracy = 1)," de la population de la r&eacute;gion 
-                                                ",LIB_TERR, "<br>",
-                                                "soit une part ","<b>",  lib_Q_pct_ind_PRES,"</b>"," par rapport aux autres r&eacute;gions de France (moyenne : ",percent(pct_ind_PRES_moy, accuracy = 1), ").","</font>", "<br>",
-                                                "<font size=2.5 color=white family=Roboto>" , "Par le jeu des mobilit&eacute;s r&eacute;sidentielles, cette part ","<b>",lib_Q_evol_pct_AUTO_PRES, "</b>", " (",
-                                                # format pourcentage avec signe
-                                                paste0(symnum(evol_pct_AUTO_PRES,
-                                                              c(-Inf, 0, Inf),
-                                                              c("", "+")),
-                                                       #percent(evol_pct_AUTO_PRES, accuracy = 0.01),""),
-                                                       round(evol_pct_AUTO_PRES*100, 2)," points de %)")," entre 2014 et 2015.", "<br>"),
-                                       #" entre 2014 et 2015 par rapport aux autres r&eacute;gions.</font>", "<br>"  ),
-                                       niveau_TERR %in% 'DEP' ~
-                                         paste0("<style> div.leaflet-popup-content {width:auto!important;}</style>",
-                                                "<font size=2.5 color=white family=Roboto>" , "Les ","<b>",tolower(CS1_LIB),"</b>"," repr&eacute;sentent ",percent(pct_ind_PRES, accuracy = 1)," de la population du d&eacute;partement 
-                                                ",LIB_TERR, "<br>",
-                                                "soit une part ","<b>",  lib_Q_pct_ind_PRES,"</b>"," par rapport aux autres d&eacute;partements de France (moyenne : ",percent(pct_ind_PRES_moy, accuracy = 1), ").","</font>", "<br>",
-                                                "<font size=2.5 color=white family=Roboto>" , "Par le jeu des mobilit&eacute;s r&eacute;sidentielles, cette part ","<b>",lib_Q_evol_pct_AUTO_PRES, "</b>", " (",
-                                                # format pourcentage avec signe
-                                                paste0(symnum(evol_pct_AUTO_PRES,
-                                                              c(-Inf, 0, Inf),
-                                                              c("", "+")),
-                                                       #percent(evol_pct_AUTO_PRES, accuracy = 0.01),""),
-                                                       round(evol_pct_AUTO_PRES*100, 2)," points de %)")," entre 2014 et 2015.","<br>"),
-                                       #" entre 2014 et 2015 par rapport aux autres d&eacute;partements.</font>", "<br>"  ),
-                                       niveau_TERR %in% 'EPCI' ~
-                                         paste0("<style> div.leaflet-popup-content {width:auto!important;}</style>",
-                                                "<font size=2.5 color=white family=Roboto>" , "Les ","<b>",tolower(CS1_LIB),"</b>"," repr&eacute;sentent ",percent(pct_ind_PRES, accuracy = 1)," de la population de 
-                                                l&apos;intercommunalit&eacute; ",LIB_TERR, "<br>",
-                                                "soit une part ","<b>",  lib_Q_pct_ind_PRES,"</b>"," par rapport aux autres intercommunalit&eacute;s de France (moyenne : ",percent(pct_ind_PRES_moy, accuracy = 1), ").","</font>", "<br>",
-                                                "<font size=2.5 color=white family=Roboto>" , "Par le jeu des mobilit&eacute;s r&eacute;sidentielles, cette part ","<b>",lib_Q_evol_pct_AUTO_PRES, "</b>", " (",
-                                                # format pourcentage avec signe
-                                                paste0(symnum(evol_pct_AUTO_PRES,
-                                                              c(-Inf, 0, Inf),
-                                                              c("", "+")),
-                                                       #percent(evol_pct_AUTO_PRES, accuracy = 0.01),""),
-                                                       round(evol_pct_AUTO_PRES*100, 2)," points de %)")," entre 2014 et 2015.","<br>")#,
-               ))) +
+             mutate(tip = case_when( niveau_TERR %in% 'REG' ~
+                                       paste0("<style> div.leaflet-popup-content {width:auto!important;}</style>",
+                                              "<font size=2.5 color=white family=Roboto>" , "Les ","<b>",tolower(CS1_LIB),"</b>"," repr&eacute;sentent ",percent(pct_ind_PRES, accuracy = 1)," de la population de la r&eacute;gion ",LIB_TERR, "<br>",
+                                              "soit une part ","<b>",  lib_Q_pct_ind_PRES,"</b>"," par rapport aux autres r&eacute;gions de France (moyenne : ",percent(pct_ind_PRES_moy, accuracy = 1), ").","</font>", "<br>",
+                                              "<font size=2.5 color=white family=Roboto>" , "Par le jeu des mobilit&eacute;s r&eacute;sidentielles, cette part ","<b>",lib_Q_evol_pct_AUTO_PRES, "</b>", " (",
+                                              # format pourcentage avec signe
+                                              paste0(symnum(evol_pct_AUTO_PRES,
+                                                            c(-Inf, 0, Inf),
+                                                            c("", "+")),
+                                                     #percent(evol_pct_AUTO_PRES, accuracy = 0.01),""),
+                                                     round(evol_pct_AUTO_PRES*100, 2)," points de %)")," entre 2014 et 2015.", "<br>"),
+                                     #" entre 2014 et 2015 par rapport aux autres r&eacute;gions.</font>", "<br>"  ),
+                                     niveau_TERR %in% 'DEP' ~
+                                       paste0("<style> div.leaflet-popup-content {width:auto!important;}</style>",
+                                              "<font size=2.5 color=white family=Roboto>" , "Les ","<b>",tolower(CS1_LIB),"</b>"," repr&eacute;sentent ",percent(pct_ind_PRES, accuracy = 1)," de la population du d&eacute;partement ",LIB_TERR, "<br>",
+                                              "soit une part ","<b>",  lib_Q_pct_ind_PRES,"</b>"," par rapport aux autres d&eacute;partements de France (moyenne : ",percent(pct_ind_PRES_moy, accuracy = 1), ").","</font>", "<br>",
+                                              "<font size=2.5 color=white family=Roboto>" , "Par le jeu des mobilit&eacute;s r&eacute;sidentielles, cette part ","<b>",lib_Q_evol_pct_AUTO_PRES, "</b>", " (",
+                                              # format pourcentage avec signe
+                                              paste0(symnum(evol_pct_AUTO_PRES,
+                                                            c(-Inf, 0, Inf),
+                                                            c("", "+")),
+                                                     #percent(evol_pct_AUTO_PRES, accuracy = 0.01),""),
+                                                     round(evol_pct_AUTO_PRES*100, 2)," points de %)")," entre 2014 et 2015.","<br>"),
+                                     #" entre 2014 et 2015 par rapport aux autres d&eacute;partements.</font>", "<br>"  ),
+                                     niveau_TERR %in% 'EPCI' ~
+                                       paste0("<style> div.leaflet-popup-content {width:auto!important;}</style>",
+                                              "<font size=2.5 color=white family=Roboto>" , "Les ","<b>",tolower(CS1_LIB),"</b>"," repr&eacute;sentent ",percent(pct_ind_PRES, accuracy = 1)," de la population de l&apos;intercommunalit&eacute; ",LIB_TERR, "<br>",
+                                              "soit une part ","<b>",  lib_Q_pct_ind_PRES,"</b>"," par rapport aux autres intercommunalit&eacute;s de France (moyenne : ",percent(pct_ind_PRES_moy, accuracy = 1), ").","</font>", "<br>",
+                                              "<font size=2.5 color=white family=Roboto>" , "Par le jeu des mobilit&eacute;s r&eacute;sidentielles, cette part ","<b>",lib_Q_evol_pct_AUTO_PRES, "</b>", " (",
+                                              # format pourcentage avec signe
+                                              paste0(symnum(evol_pct_AUTO_PRES,
+                                                            c(-Inf, 0, Inf),
+                                                            c("", "+")),
+                                                     #percent(evol_pct_AUTO_PRES, accuracy = 0.01),""),
+                                                     round(evol_pct_AUTO_PRES*100, 2)," points de %)")," entre 2014 et 2015.","<br>")#,
+             ))) +
       
       geom_vline(xintercept = 0, color = "grey40",linetype = "dashed") +
       geom_segment_interactive(aes(x=0, y=pct_ind_PRES,xend = evol_pct_AUTO_PRES, yend = pct_ind_PRES , color = CS1_LIB,
@@ -1891,7 +1769,7 @@ server <- function(input, output, session) {
                        "Employés","Ouvriers","Retraités","Autres personnes sans activité professionnelle\n(dont élèves et étudiants)")),
         values = rev(c("#00B050","#984807","#558ED5","#7030A0","#E46C0A","#FF0000","#969697","#404040"))) +  
       scale_color_manual(guide = FALSE, values = rev(c("#00B050","#984807","#558ED5","#7030A0","#E46C0A","#FF0000","#969697","#404040"))) +
-      guides(fill = guide_legend(reverse=T)) +
+       guides(fill = guide_legend(reverse=T)) +
       labs(
         title = "Par groupe socioprofessionnel",
         subtitle = ""#,
@@ -1950,17 +1828,7 @@ server <- function(input, output, session) {
         filter(!AGEREVS %in% 'GLOBAL')
       
       
-    } 
-    else if ( input$maille_TERR %in% 'EPCI' & !gsub(".*\\((.*)\\).*", "\\1", input$territoireetude_EPCI) %in% liste_EPCI_OK) return(NULL)
-    
-    else if ( input$maille_TERR %in% 'EPCI' & gsub(".*\\((.*)\\).*", "\\1", input$territoireetude_EPCI) %in% liste_EPCI_OK) {
-      indics_migres_TERR_AGEREVS_RENOUV %>%
-        as.data.frame() %>%
-        filter(NIV_TERR %in% input$maille_TERR) %>%
-        filter(TERR %in% gsub(".*\\((.*)\\).*", "\\1", input$territoireetude_EPCI) ) %>%
-        spread(type_indice, valeur) %>%
-        filter(!AGEREVS %in% 'GLOBAL')
-    }
+    } else if ( input$maille_TERR %in% 'EPCI') return(NULL)
     
     else if ( input$maille_TERR %in% 'REG') {
       indics_migres_TERR_AGEREVS_RENOUV %>%
@@ -2093,8 +1961,7 @@ server <- function(input, output, session) {
                mutate(LIB_TERR = stri_trans_general(conv_accents(LIB_TERR),"Latin-ASCII")) %>%
                mutate(tip = case_when( niveau_TERR %in% 'REG' ~
                                          paste0("<style> div.leaflet-popup-content {width:auto!important;}</style>",
-                                                "<font size=2.5 color=white family=Roboto>" , "Les ","<b>",AGEREVS_txt,"</b>"," repr&eacute;sentent ",percent(pct_ind_PRES, accuracy = 1)," de la population de la r&eacute;gion ",LIB_TERR, 
-                                                "<br>",
+                                                "<font size=2.5 color=white family=Roboto>" , "Les ","<b>",AGEREVS_txt,"</b>"," repr&eacute;sentent ",percent(pct_ind_PRES, accuracy = 1)," de la population de la r&eacute;gion ",LIB_TERR, "<br>",
                                                 "soit une part ","<b>",  lib_Q_pct_ind_PRES,"</b>"," par rapport aux autres r&eacute;gions de France (moyenne : ",percent(pct_ind_PRES_moy, accuracy = 1), ").","</font>", "<br>",
                                                 "<font size=2.5 color=white family=Roboto>" , "Par le jeu des mobilit&eacute;s r&eacute;sidentielles, cette part ","<b>",lib_Q_evol_pct_AUTO_PRES, "</b>", " (",
                                                 # format pourcentage avec signe
@@ -2104,8 +1971,7 @@ server <- function(input, output, session) {
                                                        round(evol_pct_AUTO_PRES*100, 2)," points de %)")," entre 2014 et 2015.", "<br>"),
                                        niveau_TERR %in% 'DEP' ~
                                          paste0("<style> div.leaflet-popup-content {width:auto!important;}</style>",
-                                                "<font size=2.5 color=white family=Roboto>" , "Les ","<b>",AGEREVS_txt,"</b>"," repr&eacute;sentent ",percent(pct_ind_PRES, accuracy = 1)," de la population du d&eacute;partement 
-                                                ",LIB_TERR, "<br>",
+                                                "<font size=2.5 color=white family=Roboto>" , "Les ","<b>",AGEREVS_txt,"</b>"," repr&eacute;sentent ",percent(pct_ind_PRES, accuracy = 1)," de la population du d&eacute;partement ",LIB_TERR, "<br>",
                                                 "soit une part ","<b>",  lib_Q_pct_ind_PRES,"</b>"," par rapport aux autres d&eacute;partements de France (moyenne : ",percent(pct_ind_PRES_moy, accuracy = 1), ").","</font>", "<br>",
                                                 "<font size=2.5 color=white family=Roboto>" , "Par le jeu des mobilit&eacute;s r&eacute;sidentielles, cette part ","<b>",lib_Q_evol_pct_AUTO_PRES, "</b>", " (",
                                                 # format pourcentage avec signe
@@ -2115,8 +1981,7 @@ server <- function(input, output, session) {
                                                        round(evol_pct_AUTO_PRES*100, 2)," points de %)")," entre 2014 et 2015.", "<br>"),
                                        niveau_TERR %in% 'EPCI' ~
                                          paste0("<style> div.leaflet-popup-content {width:auto!important;}</style>",
-                                                "<font size=2.5 color=white family=Roboto>" , "Les ","<b>",AGEREVS_txt,"</b>"," repr&eacute;sentent ",percent(pct_ind_PRES, accuracy = 1)," de la population de 
-                                                l&apos;intercommunalit&eacute; ",LIB_TERR, "<br>",
+                                                "<font size=2.5 color=white family=Roboto>" , "Les ","<b>",AGEREVS_txt,"</b>"," repr&eacute;sentent ",percent(pct_ind_PRES, accuracy = 1)," de la population de l&apos;intercommunalit&eacute; ",LIB_TERR, "<br>",
                                                 "soit une part ","<b>",  lib_Q_pct_ind_PRES,"</b>"," par rapport aux autres intercommunalit&eacute;s de France (moyenne : ",percent(pct_ind_PRES_moy, accuracy = 1), ").","</font>", "<br>",
                                                 "<font size=2.5 color=white family=Roboto>" , "Par le jeu des mobilit&eacute;s r&eacute;sidentielles, cette part ","<b>",lib_Q_evol_pct_AUTO_PRES, "</b>", " (",
                                                 # format pourcentage avec signe
@@ -2125,8 +1990,8 @@ server <- function(input, output, session) {
                                                               c("", "+")),
                                                        round(evol_pct_AUTO_PRES*100, 2)," points de %)")," entre 2014 et 2015.", "<br>")
                ))) +
-      
-      geom_vline(xintercept = 0, color = "grey40",linetype = "dashed") +
+
+    geom_vline(xintercept = 0, color = "grey40",linetype = "dashed") +
       geom_segment_interactive(aes(x=0, y=pct_ind_PRES,xend = evol_pct_AUTO_PRES, yend = pct_ind_PRES , color = AGEREVS,
                                    tooltip = tip,
                                    data_id = AGEREVS),
@@ -2212,21 +2077,8 @@ server <- function(input, output, session) {
         mutate(ratio_ligne = 8000) %>%
         mutate(ratio_fleche = 30) 
       
-    } 
-    else if ( input$maille_TERR %in% 'EPCI' & !gsub(".*\\((.*)\\).*", "\\1", input$territoireetude_EPCI) %in% liste_EPCI_OK) return(NULL)
+    } else if ( input$maille_TERR %in% 'EPCI') return(NULL)
     
-    else if ( input$maille_TERR %in% 'EPCI' & gsub(".*\\((.*)\\).*", "\\1", input$territoireetude_EPCI) %in% liste_EPCI_OK) {
-      
-      flux_migres_TERR.map %>% 
-        filter(NIV_TERR %in% input$maille_TERR) %>%
-        filter(TERR_ACTU %in% gsub(".*\\((.*)\\).*", "\\1", input$territoireetude_EPCI) ) %>%
-        # cappé à 10 flux minimum ?
-        filter(nb_ind >= 10)%>%
-        # définition du ratio
-        mutate(ratio_ligne = 2500) %>%
-        mutate(ratio_fleche = 60) 
-      
-    }
     
   })
   
@@ -2257,22 +2109,7 @@ server <- function(input, output, session) {
         mutate(ratio_fleche = 30) 
       
       
-    } 
-    else if ( input$maille_TERR %in% 'EPCI' & !gsub(".*\\((.*)\\).*", "\\1", input$territoireetude_EPCI) %in% liste_EPCI_OK) return(NULL)
-    
-    else if ( input$maille_TERR %in% 'EPCI' & gsub(".*\\((.*)\\).*", "\\1", input$territoireetude_EPCI) %in% liste_EPCI_OK) {
-      
-      flux_migres_TERR.map %>% 
-        filter(NIV_TERR %in% input$maille_TERR) %>%
-        filter(TERR_ANTE %in% gsub(".*\\((.*)\\).*", "\\1", input$territoireetude_EPCI) ) %>%
-        # cappé à 10 flux minimum ?
-        filter(nb_ind >= 10)%>%
-        # définition du ratio
-        mutate(ratio_ligne = 2500) %>%
-        mutate(ratio_fleche = 60)  
-      
-      
-    }
+    } else if ( input$maille_TERR %in% 'EPCI') return(NULL)
   })
   
   # dataframe pour flux SM net
@@ -2283,7 +2120,7 @@ server <- function(input, output, session) {
       flux_migres_TERR.map.SMnet %>%
         filter(NIV_TERR %in% input$maille_TERR) %>%
         filter(TERR_j %in% gsub(".*\\((.*)\\).*", "\\1", input$territoireetude_REG)) %>%
-        
+
         # définition du ratio
         mutate(ratio_ligne = 15000) %>%
         mutate(ratio_fleche = 20)  %>%
@@ -2310,35 +2147,14 @@ server <- function(input, output, session) {
         rbind.data.frame(flux_migres_TERR.map.SMnet %>%
                            filter(NIV_TERR %in% input$maille_TERR) %>%
                            filter(TERR_i %in% gsub(".*\\((.*)\\).*", "\\1", input$territoireetude_DEP)) %>%
-                           # définition du ratio
+                          # définition du ratio
                            mutate(ratio_ligne = 8000) %>%
                            mutate(ratio_fleche = 30) %>%
                            mutate(type_flow = "sort"))
       
       
       
-    } 
-    else if ( input$maille_TERR %in% 'EPCI' & !gsub(".*\\((.*)\\).*", "\\1", input$territoireetude_EPCI) %in% liste_EPCI_OK) return(NULL)
-    
-    else if ( input$maille_TERR %in% 'EPCI' & gsub(".*\\((.*)\\).*", "\\1", input$territoireetude_EPCI) %in% liste_EPCI_OK) {
-      
-      flux_migres_TERR.map.SMnet %>%
-        filter(NIV_TERR %in% input$maille_TERR) %>%
-        filter(TERR_j %in% gsub(".*\\((.*)\\).*", "\\1", input$territoireetude_EPCI)) %>%
-        # définition du ratio
-        mutate(ratio_ligne = 2500) %>%
-        mutate(ratio_fleche = 60) %>%
-        mutate(type_flow = "entr") %>%
-        rbind.data.frame(flux_migres_TERR.map.SMnet %>%
-                           filter(NIV_TERR %in% input$maille_TERR) %>%
-                           filter(TERR_i %in% gsub(".*\\((.*)\\).*", "\\1", input$territoireetude_EPCI)) %>%
-                           # définition du ratio
-                           mutate(ratio_ligne = 2500) %>%
-                           mutate(ratio_fleche = 60) %>%
-                           mutate(type_flow = "sort"))
-      
-      
-    }
+    } else if ( input$maille_TERR %in% 'EPCI') return(NULL)
   })
   
   ### territoire cible geo
@@ -2355,14 +2171,7 @@ server <- function(input, output, session) {
         filter(NIV_TERR %in% input$maille_TERR) %>%
         filter(TERR %in% gsub(".*\\((.*)\\).*", "\\1", input$territoireetude_DEP)) 
       
-    } else if ( input$maille_TERR %in% 'EPCI' & !gsub(".*\\((.*)\\).*", "\\1", input$territoireetude_EPCI) %in% liste_EPCI_OK) return(NULL)
-    
-    else if ( input$maille_TERR %in% 'EPCI' & gsub(".*\\((.*)\\).*", "\\1", input$territoireetude_EPCI) %in% liste_EPCI_OK) {
-      geo_TERR_poly %>%
-        filter(NIV_TERR %in% input$maille_TERR) %>%
-        filter(TERR %in% gsub(".*\\((.*)\\).*", "\\1", input$territoireetude_EPCI)) 
-      
-    }
+    } else if ( input$maille_TERR %in% 'EPCI') return(NULL)
   })
   
   #########################
@@ -2634,7 +2443,7 @@ server <- function(input, output, session) {
         scale_color_gradient(low = "#fecccc", high = "#190000", 
                              name = paste0("Répartition des individus ayant quitté\n",libelle_NIVGEO, filteredData_geo_TERR()$LIB_TERR) ,
                              labels = percent_format(accuracy = 1)) +
-        
+
         guides(fill = guide_legend(reverse=T, order = 1)) +
         theme_ipsum() +
         coord_sf(crs = 2154, datum = NA) +
@@ -2722,33 +2531,27 @@ server <- function(input, output, session) {
                                  mutate(tip = case_when(type_flow %in% 'entr' & niveau_TERR %in% 'REG' ~
                                                           paste0("<style> div.leaflet-popup-content {width:auto!important;}</style>",
                                                                  "<font size=2.5 color=white family=Roboto>",'La r&eacute;gion ',"<b>", LIB_TERR,"</b>" ,"<br>"," a perdu ",
-                                                                 format(round(flux_net_sens,-1), nsmall=0, big.mark=" "), " habitants vis-&agrave;-vis ","<br>","de la r&eacute;gion ","<b>",stri_trans_general(conv_accents
-                                                                                                                                                                                                                (filteredData_geo_TERR()$LIB_TERR),"Latin-ASCII") ,"</b>","</font>", "<br>" ),
+                                                                 format(round(flux_net_sens,-1), nsmall=0, big.mark=" "), " habitants vis-&agrave;-vis ","<br>","de la r&eacute;gion ","<b>",stri_trans_general(conv_accents(filteredData_geo_TERR()$LIB_TERR),"Latin-ASCII") ,"</b>","</font>", "<br>" ),
                                                         type_flow %in% 'entr' & niveau_TERR %in% 'DEP' ~
                                                           paste0("<style> div.leaflet-popup-content {width:auto!important;}</style>",
                                                                  "<font size=2.5 color=white family=Roboto>",'Le d&eacute;partement ',"<b>", LIB_TERR,"</b>" ,"<br>"," a perdu ",
-                                                                 format(round(flux_net_sens,-1), nsmall=0, big.mark=" "), " habitants vis-&agrave;-vis ","<br>","du d&eacute;partement ","<b>",stri_trans_general(conv_accents
-                                                                                                                                                                                                                  (filteredData_geo_TERR()$LIB_TERR),"Latin-ASCII") ,"</b>" ,"</font>", "<br>" ),
+                                                                 format(round(flux_net_sens,-1), nsmall=0, big.mark=" "), " habitants vis-&agrave;-vis ","<br>","du d&eacute;partement ","<b>",stri_trans_general(conv_accents(filteredData_geo_TERR()$LIB_TERR),"Latin-ASCII") ,"</b>" ,"</font>", "<br>" ),
                                                         type_flow %in% 'entr' & niveau_TERR %in% 'EPCI' ~
                                                           paste0("<style> div.leaflet-popup-content {width:auto!important;}</style>",
                                                                  "<font size=2.5 color=white family=Roboto>","L&apos;intercommunalit&eacute; ","<b>",LIB_TERR,"</b>"  ,"<br>"," a perdu ",
-                                                                 format(round(flux_net_sens,-1), nsmall=0, big.mark=" "), " habitants vis-&agrave;-vis ","<br>","de l&apos;intercommunalit&eacute; ","<b>",stri_trans_general(conv_accents
-                                                                                                                                                                                                                              (filteredData_geo_TERR()$LIB_TERR),"Latin-ASCII") ,"</b>" ,"</font>", "<br>" ),
+                                                                 format(round(flux_net_sens,-1), nsmall=0, big.mark=" "), " habitants vis-&agrave;-vis ","<br>","de l&apos;intercommunalit&eacute; ","<b>",stri_trans_general(conv_accents(filteredData_geo_TERR()$LIB_TERR),"Latin-ASCII") ,"</b>" ,"</font>", "<br>" ),
                                                         type_flow %in% 'sort' & niveau_TERR %in% 'REG' ~
                                                           paste0("<style> div.leaflet-popup-content {width:auto!important;}</style>",
                                                                  "<font size=2.5 color=white family=Roboto>",'La r&eacute;gion ',"<b>",LIB_TERR,"</b>" ,"<br>"," a gagn&eacute; ",
-                                                                 format(round(flux_net_sens,-1), nsmall=0, big.mark=" "), " habitants vis-&agrave;-vis ","<br>","de la r&eacute;gion ","<b>",stri_trans_general(conv_accents
-                                                                                                                                                                                                                (filteredData_geo_TERR()$LIB_TERR),"Latin-ASCII") ,"</b>" ,"</font>", "<br>" ),
+                                                                 format(round(flux_net_sens,-1), nsmall=0, big.mark=" "), " habitants vis-&agrave;-vis ","<br>","de la r&eacute;gion ","<b>",stri_trans_general(conv_accents(filteredData_geo_TERR()$LIB_TERR),"Latin-ASCII") ,"</b>" ,"</font>", "<br>" ),
                                                         type_flow %in% 'sort' & niveau_TERR %in% 'DEP' ~
                                                           paste0("<style> div.leaflet-popup-content {width:auto!important;}</style>",
                                                                  "<font size=2.5 color=white family=Roboto>",'Le d&eacute;partement ',"<b>",LIB_TERR,"</b>"  ,"<br>"," a gagn&eacute; ",
-                                                                 format(round(flux_net_sens,-1), nsmall=0, big.mark=" "), " habitants vis-&agrave;-vis ","<br>","du d&eacute;partement ","<b>",stri_trans_general(conv_accents
-                                                                                                                                                                                                                  (filteredData_geo_TERR()$LIB_TERR),"Latin-ASCII") ,"</b>" ,"</font>", "<br>" ),
+                                                                 format(round(flux_net_sens,-1), nsmall=0, big.mark=" "), " habitants vis-&agrave;-vis ","<br>","du d&eacute;partement ","<b>",stri_trans_general(conv_accents(filteredData_geo_TERR()$LIB_TERR),"Latin-ASCII") ,"</b>" ,"</font>", "<br>" ),
                                                         type_flow %in% 'sort' & niveau_TERR %in% 'EPCI' ~
                                                           paste0("<style> div.leaflet-popup-content {width:auto!important;}</style>",
                                                                  "<font size=2.5 color=white family=Roboto>","L&apos;intercommunalit&eacute; ","<b>",LIB_TERR ,"</b>" ,"<br>"," a gagn&eacute; ",
-                                                                 format(round(flux_net_sens,-1), nsmall=0, big.mark=" "), " habitants vis-&agrave;-vis ","<br>","de l&apos;intercommunalit&eacute; ","<b>",stri_trans_general(conv_accents
-                                                                                                                                                                                                                              (filteredData_geo_TERR()$LIB_TERR),"Latin-ASCII") ,"</b>","</font>", "<br>" ),
+                                                                 format(round(flux_net_sens,-1), nsmall=0, big.mark=" "), " habitants vis-&agrave;-vis ","<br>","de l&apos;intercommunalit&eacute; ","<b>",stri_trans_general(conv_accents(filteredData_geo_TERR()$LIB_TERR),"Latin-ASCII") ,"</b>","</font>", "<br>" ),
                                                         TRUE ~ "NA"
                                  )),
                                aes(x = x_ctr.do, y = y_ctr.do,
@@ -2762,17 +2565,17 @@ server <- function(input, output, session) {
                    guide= F,
                    name = "Intensité du solde migratoire") +
         scale_alpha_continuous(range = c(0.5,1), guide = F)+
-        scale_fill_manual(values = c( '#1877be','#d6241b'),
-                          name = "",
-                          labels = c(paste0("Solde migratoire déficitaire ", libelle_NIVGEO,"\n",
-                                            " vis à vis ",libelle_NIVGEO, filteredData_geo_TERR()$LIB_TERR),
-                                     paste0("Solde migratoire excédentaire ", libelle_NIVGEO,"\n",
-                                            " vis à vis ",libelle_NIVGEO, filteredData_geo_TERR()$LIB_TERR))) +
+      scale_fill_manual(values = c( '#1877be','#d6241b'),
+                        name = "",
+                        labels = c(paste0("Solde migratoire déficitaire ", libelle_NIVGEO,"\n",
+                                          " vis à vis ",libelle_NIVGEO, filteredData_geo_TERR()$LIB_TERR),
+                                   paste0("Solde migratoire excédentaire ", libelle_NIVGEO,"\n",
+                                          " vis à vis ",libelle_NIVGEO, filteredData_geo_TERR()$LIB_TERR))) +
         theme_ipsum() +
         coord_sf(crs = 2154, datum = NA) +
         scale_x_continuous(name = "") +
         scale_y_continuous(name = "") +
-        theme(strip.text.y = element_text(angle = 360),
+       theme(strip.text.y = element_text(angle = 360),
               text = element_text(family = "Roboto", color = "black"),
               panel.background = element_rect(fill = NA, color = NA),
               plot.background = element_rect(fill = NA, color = NA),
